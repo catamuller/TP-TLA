@@ -66,6 +66,13 @@ struct Program {
 	Expression * expression;
 };
 
+//tipo de dato de la nota mas atomica posible
+#define MAX_NOTE_LEN 10
+struct Note {
+	char note[MAX_NOTE_LEN];
+};
+
+
 /**
  * Node recursive destructors.
  */

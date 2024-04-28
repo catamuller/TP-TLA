@@ -9,7 +9,11 @@
 %union {
 	/** Terminals. */
 
-	int integer;
+	Note note;
+	Chord chord;
+	Rest rest;
+	Integer integer;
+	Instrument instrument;
 	Token token;
 
 	/** Non-terminals. */
@@ -35,7 +39,14 @@
 */
 
 /** Terminals. */
+%token <note> NOTE
+%token <chord> CHORD
+%token <rest> REST
 %token <integer> INTEGER
+%token <token> OPEN_BRACES
+%token <token> CLOSE_BRACES
+%token <instrument> INSTRUMENT
+
 %token <token> ADD
 %token <token> CLOSE_PARENTHESIS
 %token <token> DIV

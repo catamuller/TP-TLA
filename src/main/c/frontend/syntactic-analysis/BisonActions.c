@@ -85,3 +85,12 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 	}
 	return program;
 }
+
+//aca empieza nuestro codigo :D
+Note * InstrumentProgramSemanticAction(Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Factor * factor = calloc(1, sizeof(Factor));
+	factor->expression = expression;
+	factor->type = EXPRESSION;
+	return factor;
+}

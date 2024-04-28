@@ -54,6 +54,34 @@ void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	}
 }
 
+Token NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->note = lexicalAnalyzerContext->lexeme;
+	return NOTE;
+}
+
+Token ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->chord = lexicalAnalyzerContext->lexeme;
+	return CHORD;
+}
+
+Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->rest = lexicalAnalyzerContext->lexeme;
+	return REST;
+}
+
+Token InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->instrument = lexicalAnalyzerContext->lexeme;
+	return INSTRUMENT;
+}
+
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	Token token;
