@@ -79,8 +79,7 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 	if (0 < flexCurrentContext()) {
 		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
 		compilerState->succeed = false;
-	}
-	else {
+	} else {
 		compilerState->succeed = true;
 	}
 	return program;

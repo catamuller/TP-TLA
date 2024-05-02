@@ -22,6 +22,19 @@ typedef struct Expression Expression;
 typedef struct Factor Factor;
 typedef struct Program Program;
 
+typedef struct Assignment Assignment;
+typedef struct Type Type;
+typedef struct noteExpression noteExpression;
+typedef struct scoreExpression scoreExpression;
+typedef struct chord chord;
+typedef struct note note;
+typedef struct instrument instrument;
+typedef struct sentences sentences;
+typedef struct sentence sentence;
+typedef struct clefSentence clefSentence;
+typedef struct tabsSentence tabsSentence;
+typedef struct clef clef;
+
 /**
  * Node types for the Abstract Syntax Tree (AST).
  */
@@ -37,6 +50,56 @@ enum ExpressionType {
 enum FactorType {
 	CONSTANT,
 	EXPRESSION
+};
+
+struct Assignment {
+	Type * class;
+	IDM id;
+	Expression * expression;
+};
+
+struct Type {
+	Class class;
+};
+
+struct noteExpression {
+
+};
+
+struct scoreExpression {
+
+};
+
+struct chord {
+
+};
+
+struct note {
+
+};
+
+struct instrument {
+
+};
+
+struct sentences {
+
+};
+
+struct sentence {
+
+};
+
+struct clefSentence {
+
+};
+
+struct tabsSentence {
+
+};
+
+struct clef {
+
 };
 
 struct Constant {

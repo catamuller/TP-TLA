@@ -65,15 +65,15 @@ Class ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	Token token;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Integer") == 0)
-		token = INTEGER;
+		token = INTEGERCLASS;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Note") == 0)
-		token = NOTE;
+		token = NOTECLASS;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Chord") == 0)
-		token = CHORD;
+		token = CHORDCLASS;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Rest") == 0)
-		token = REST;
+		token = RESTCLASS;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Tab") == 0)
-		token = TAB;
+		token = TABCLASS;
 		
 	lexicalAnalyzerContext->semanticValue->token = token;
 	return token;
@@ -99,6 +99,14 @@ Rest RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	lexicalAnalyzerContext->semanticValue->rest = lexicalAnalyzerContext->lexeme;
 	return REST;
 }
+
+Clef ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->clef = lexicalAnalyzerContext->lexeme;
+	return CLEF;
+}
+
 
 Instrument InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -127,6 +135,14 @@ Token SignatureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	lexicalAnalyzerContext->semanticValue->token = SIGNATURE;
 	return SIGNATURE;
 }
+
+Token PipeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = PIPE;
+	return PIPE;
+}
+
 
 Token ClefLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -157,6 +173,44 @@ Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	lexicalAnalyzerContext->semanticValue->token = COMMA;
 	return COMMA;
+}
+
+Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = SEMICOLON;
+	return SEMICOLON;
+}
+
+Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = DOT;
+	return DOT;
+}
+
+Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	Token token;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "after") == 0)
+		token = AFTER;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "before") == 0)
+		token = BEFORE;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "along") == 0)
+		token = ALONG;
+		
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
+}
+
+Token RepetitionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = REPEAT;
+	return REPEAT;
+}
+
+Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = TRANSPOSE;
+	return TRANSPOSE;
 }
 
 IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {

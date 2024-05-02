@@ -9,6 +9,7 @@ typedef enum {
 typedef int Token;
 typedef int Integer;
 typedef int Class;
+typedef char Clef;
 typedef char* IDM;
 typedef char* Note;
 typedef char* Chord;

@@ -38,6 +38,19 @@ Token BracesLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token RepetitionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Clef ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token PipeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+
 IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token ScoreLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
