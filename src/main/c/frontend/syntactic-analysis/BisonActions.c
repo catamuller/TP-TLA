@@ -86,10 +86,26 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 }
 
 //aca empieza nuestro codigo :D
-Note * InstrumentProgramSemanticAction(Expression * expression) {
+Program * ProgramSemanticAction(Assignment * assignment) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->expression = expression;
+	Program * program = calloc(1, sizeof(Program));
+	Program->assignment = assignment;
 	factor->type = EXPRESSION;
 	return factor;
+}
+
+Assignment * AssignmentSemanticAction(Type type, char * id, Expression * expression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Assignment * assignment = calloc(1, sizeof(Assignment));
+	assignment->id = id;
+	assignment->expression = expression;
+	assignment->type = type;
+	return assignment;
+}
+
+Type * TypeSemanticAction(Class class) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Type * type = calloc(1, sizeof(Type));
+	type->class = class;
+	return type;
 }

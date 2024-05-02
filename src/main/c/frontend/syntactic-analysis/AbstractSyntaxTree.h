@@ -55,6 +55,7 @@ enum FactorType {
 struct Assignment {
 	Type * class;
 	IDM id;
+	//token equal
 	Expression * expression;
 };
 
@@ -62,8 +63,9 @@ struct Type {
 	Class class;
 };
 
+//Cm(C, 2, marimba)
 struct noteExpression {
-
+	Note note;
 };
 
 struct scoreExpression {
@@ -126,15 +128,8 @@ struct Expression {
 };
 
 struct Program {
-	Expression * expression;
+	Assignment * assignment;
 };
-
-//tipo de dato de la nota mas atomica posible
-#define MAX_NOTE_LEN 10
-struct Note {
-	char note[MAX_NOTE_LEN];
-};
-
 
 /**
  * Node recursive destructors.

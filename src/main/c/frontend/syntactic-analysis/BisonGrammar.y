@@ -129,16 +129,17 @@
 program: assignment													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
 	;
 
-assignment: type ID EQUAL expression				
+assignment: type ID EQUAL expression								{ $$ = AssignmentSemanticAction(currentCompilerState(), $1, $2, $4); }
 	;
 
-type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	
+type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	{ $$ = TypeSemanticAction(currentCompilerState(), $1); }
 	;
 
-expression: noteExpression | scoreExpression													
+/*TODO #################################### ∇×E=-∂B/∂t*/
+expression: noteExpression | scoreExpression						{ $$ = ExpressionSemanticAction(currentCompilerState(), $1); }							
 	;
 
-noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS
+noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS		{ $$ = ExpressionSemanticAction(currentCompilerState(), $1, $3, $5, $7); }	
 	;
 
 note: NOTE
