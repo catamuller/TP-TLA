@@ -12,6 +12,8 @@
 	Note note;
 	Chord chord;
 	Rest rest;
+	Tab tab;
+	IDM id;
 	Integer integer;
 	Instrument instrument;
 	Token token;
@@ -39,24 +41,34 @@
 */
 
 /** Terminals. */
+%token <id> ID
 %token <note> NOTE
 %token <chord> CHORD
 %token <rest> REST
-%token <integer> INTEGER
-%token <token> OPEN_BRACES
-%token <token> CLOSE_BRACES
+%token <tab> TAB
 %token <instrument> INSTRUMENT
 
-%token <token> ADD
+%token <token> SCORE
+%token <token> TEMPO
+%token <token> SIGNATURE
+%token <token> CLEF
+%token <token> TABS
+
+%token <integer> INTEGER
+
+%token <token> OPEN_BRACES
+%token <token> CLOSE_BRACES
+%token <token> COMMA
+%token <token> EQUAL
+
 %token <token> CLOSE_PARENTHESIS
-%token <token> DIV
-%token <token> MUL
 %token <token> OPEN_PARENTHESIS
-%token <token> SUB
 
 %token <token> UNKNOWN
 
 /** Non-terminals. */
+
+
 %type <constant> constant
 %type <expression> expression
 %type <factor> factor

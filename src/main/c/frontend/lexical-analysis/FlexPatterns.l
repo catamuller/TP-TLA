@@ -31,24 +31,40 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-("c"|"d"|"e"|"f"|"g"|"a"|"b")("#"|"b")?([:digit:]|"10")?(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))?                                                { return NoteLexemeAction(createLexicalAnalyzerContext()); }
-("C"|"D"|"E"|"F"|"G"|"A"|"B")("m"|"7"|"maj7"|"dim"|"aug"|"sus2"|"sus4")?(\(([:digit:]|"10")","([:space:])?("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))?("arp")?    { return ChordLexemeAction(createLexicalAnalyzerContext()); }
-"R"(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))?                                                                                                       { return RestLexemeAction(createLexicalAnalyzerContext()); }
-("Note"|"Chord"|"Rest"|"Tab")[:space:][:alnum:]+
-("Note"|"Chord"|"Rest"|"Tab")\(("c"|"d"|"e"|"f"|"g"|"a"|"b")("#"|"b")?","[:space:]?([:digit:]|"10")","\)             
-("piano")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
+("c"|"d"|"e"|"f"|"g"|"a"|"b")("#"|"b")?([:digit:]|"10")?(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))? { return NoteLexemeAction(createLexicalAnalyzerContext()); }
+("C"|"D"|"E"|"F"|"G"|"A"|"B")("m"|"7"|"maj7"|"dim"|"aug"|"sus2"|"sus4")?(\(([:digit:]|"10")","([:space:])?("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))?("arp")? { return ChordLexemeAction(createLexicalAnalyzerContext()); }
+"R"(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))? { return RestLexemeAction(createLexicalAnalyzerContext()); }
 
-"-"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext()); }
-"*"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext()); }
-"/"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext()); }
-"+"									{ return ArithmeticOperatorLexemeAction(createLexicalAnalyzerContext()); }
+"Integer"           { return ClassLexemeAction(createLexicalAnalyzerContext()); }                                                                                                       
+"Note"              { return ClassLexemeAction(createLexicalAnalyzerContext()); }
+"Chord"             { return ClassLexemeAction(createLexicalAnalyzerContext()); }
+"Rest"              { return ClassLexemeAction(createLexicalAnalyzerContext()); }
+"Tab"               { return ClassLexemeAction(createLexicalAnalyzerContext()); }
+
+
+("piano" | "marimba")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
+
+"score"             { return ScoreLexemeAction(createLexicalAnalyzerContext()); }
+"tempo"             { return TempoLexemeAction(createLexicalAnalyzerContext()); }
+"signature"         { return SignatureLexemeAction(createLexicalAnalyzerContext()); }
+"clef"              { return ClefLexemeAction(createLexicalAnalyzerContext()); }
+"tabs"              { return TabsLexemeAction(createLexicalAnalyzerContext()); }
+
+"="                 { return EqualLexemeAction(createLexicalAnalyzerContext()); }
+
+","                 { return CommaLexemeAction(createLexicalAnalyzerContext()); }
+
+"{"                 { return BracesLexemeAction(createLexicalAnalyzerContext()); }
+"}"                 { return BracesLexemeAction(createLexicalAnalyzerContext()); }
 
 "("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext()); }
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext()); }
 
-[[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
+[[:alnum]]+         { return IDLexemeAction(createLexicalAnalyzerContext()); }
 
-[[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+[[:digit:]]+				{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
+
+[[:space:]]+				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 
 %%

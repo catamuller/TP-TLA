@@ -25,10 +25,27 @@ void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerC
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Token NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token InstrumentLexemeAction(LexicalAnalyzerContext * LexicalAnalyzerContext);
+Note NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Chord ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Rest RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Instrument InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Class ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token EqualLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token BracesLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
+Token ScoreLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token TempoLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token SignatureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ClefLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token TabsLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

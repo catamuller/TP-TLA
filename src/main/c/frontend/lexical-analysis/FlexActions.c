@@ -54,33 +54,117 @@ void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	}
 }
 
-Token NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Note NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->note = lexicalAnalyzerContext->lexeme;
 	return NOTE;
 }
 
-Token ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Class ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	Token token;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "Integer") == 0)
+		token = INTEGER;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "Note") == 0)
+		token = NOTE;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "Chord") == 0)
+		token = CHORD;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "Rest") == 0)
+		token = REST;
+	if (strcmp(lexicalAnalyzerContext->lexeme, "Tab") == 0)
+		token = TAB;
+		
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
+}
+
+Token EqualLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = EQUAL;
+	return EQUAL;
+}
+
+Chord ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->chord = lexicalAnalyzerContext->lexeme;
 	return CHORD;
 }
 
-Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Rest RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->rest = lexicalAnalyzerContext->lexeme;
 	return REST;
 }
 
-Token InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Instrument InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->instrument = lexicalAnalyzerContext->lexeme;
 	return INSTRUMENT;
 }
+
+Token ScoreLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = SCORE;
+	return SCORE;
+}
+
+Token TempoLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = TEMPO;
+	return TEMPO;
+}
+
+Token SignatureLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = SIGNATURE;
+	return SIGNATURE;
+}
+
+Token ClefLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = CLEF;
+	return CLEF;
+}
+
+Token TabsLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->token = TABS;
+	return TABS;
+}
+
+Token BracesLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	Token token;
+	switch (lexicalAnalyzerContext->lexeme[0]) {
+		case '{': token = OPEN_BRACES; break;
+		case '}': token = CLOSE_BRACES; break;
+	}
+	lexicalAnalyzerContext->semanticValue->token = token;
+	return token;
+}
+
+Token CommaLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = COMMA;
+	return COMMA;
+}
+
+IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->integer = lexicalAnalyzerContext->lexeme;
+	return ID;
+}
+
 
 Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);

@@ -8,9 +8,12 @@ typedef enum {
 
 typedef int Token;
 typedef int Integer;
+typedef int Class;
+typedef char* IDM;
 typedef char* Note;
 typedef char* Chord;
 typedef char* Rest;
+typedef char* Tab;
 typedef char* Instrument;
 
 #endif
