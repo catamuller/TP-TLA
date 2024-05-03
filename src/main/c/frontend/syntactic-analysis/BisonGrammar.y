@@ -139,25 +139,31 @@ type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	{ $$ = TypeSe
 expression: noteExpression | scoreExpression						{ $$ = ExpressionSemanticAction(currentCompilerState(), $1); }							
 	;
 
-noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS		{ $$ = ExpressionSemanticAction(currentCompilerState(), $1, $3, $5, $7); }	
+/*
+*Asumo que Noteclass va implicito con noteExpression, commo el = con Assignment
+*/
+noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS		{ $$ = noteExpressionSemanticAction(currentCompilerState(), $3, $5, $7); }	
 	;
 
-note: NOTE
+note: NOTE															{ $$ = NoteSemanticAction(currentCompilerState(), $1); }
 	;
 
-chord: CHORD
+chord: CHORD														{ $$ = ChordSemanticAction(currentCompilerState(), $1); }
 	;
 
-instrument: INSTRUMENT
+instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction(currentCompilerState(), $1); }
 	;
 
-scoreExpression: instrument OPEN_BRACES sentences CLOSE_BRACES
+scoreExpression: instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = scoreExpressionSemanticAction(currentCompilerState(), $1, $3); }
 	;
 
-sentences: sentence sentences | sentence
+/*lindo quilombo con las s >:| */
+sentences: sentence sentences							{ $$ = sentencesSentenceSentencesSemanticAction(currentCompilerState(), $1, $3); }
+	| sentence											{ $$ = sentencesSentenceSemanticAction(currentCompilerState(), $1); }
 	;
 
-sentence: clefSentence | tabsSentence
+sentence: clefSentence									{ $$ = sentenceClefSentenceSemanticAction(currentCompilerState(), $1); }
+	| tabsSentence										{ $$ = sentenceTabsSentenceSemanticAction(currentCompilerState(), $1); }
 	;
 
 clefSentence: CLEF clef SEMICOLON

@@ -55,7 +55,6 @@ enum FactorType {
 struct Assignment {
 	Type * class;
 	IDM id;
-	//token equal
 	Expression * expression;
 };
 
@@ -66,26 +65,35 @@ struct Type {
 //Cm(C, 2, marimba)
 struct noteExpression {
 	Note note;
+	int pitch;
+	Instrument instrument;
 };
 
 struct scoreExpression {
-
+	Instrument instrument;
+	sentences sentences;
 };
 
 struct chord {
-
+	Chord chord;
 };
 
 struct note {
-
+	Note note;
 };
 
 struct instrument {
-
+	Instrument instrument;
 };
 
 struct sentences {
-
+	union {
+		sentence * _sentence;
+		struct {
+			sentence * _sentence;
+			sentences * _sentences;
+		};
+	};
 };
 
 struct sentence {

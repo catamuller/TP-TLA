@@ -109,3 +109,49 @@ Type * TypeSemanticAction(Class class) {
 	type->class = class;
 	return type;
 }
+
+noteExpression * noteExpressionSemanticAction(Note note, int pitch, Instrument instrument) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	noteExpression * note_expression = calloc(1, sizeof(noteExpression));
+	note_expression->note = note;
+	note_expression->pitch = pitch;
+	note_expression->instrument = instrument;
+	return noteExpression;
+}
+
+Note * NoteSemanticAction(Note note) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Note * note = calloc(1, sizeof(Note));
+	note -> note = note;
+	return note;
+}
+
+Chord * ChordSemanticAction(Chord chord) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Chord * chord = calloc(1, sizeof(Chord));
+	chord -> chord = chord;
+	return chord;
+}
+
+Instrument * InstrumentSemanticAction(Instrument instrument) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Instrument * instrument = calloc(1, sizeof(Instrument));
+	instrument -> instrument = instrument;
+	return instrument;
+}
+
+scoreExpression * InstrumentSemanticAction(Instrument instrument, sentences sentences) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	scoreExpression * score_expression = calloc(1, sizeof(scoreExpression));
+	score_expression->instrument = instrument;
+	score_expression->sentences = sentences;
+	return score_expression;
+}
+
+sentences * sentencesSemanticAction(sentences _sentences) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	sentence * _sentences = calloc(1, sizeof(_sentences));
+	_sentences -> _sentences = _sentences;
+
+	return sentences;
+}
