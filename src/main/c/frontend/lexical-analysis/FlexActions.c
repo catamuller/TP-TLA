@@ -227,7 +227,7 @@ IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 }
 
 
-Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+/*Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	Token token;
 	switch (lexicalAnalyzerContext->lexeme[0]) {
@@ -238,7 +238,7 @@ Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerCon
 	}
 	lexicalAnalyzerContext->semanticValue->token = token;
 	return token;
-}
+}*/
 
 Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
