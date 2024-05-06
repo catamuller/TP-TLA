@@ -97,7 +97,7 @@ Token SignatureValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->signature = lexicalAnalyzerContext->lexeme;
-	return SIGNATURE;
+	return SIGNATUREVALUE;
 }
 
 Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
@@ -110,8 +110,8 @@ Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
-	lexicalAnalyzerContext->semanticValue->clef = lexicalAnalyzerContext->lexeme[0];
-	return CLEF;
+	lexicalAnalyzerContext->semanticValue->clef = lexicalAnalyzerContext->lexeme;
+	return CLEFVALUE;
 }
 
 
@@ -222,7 +222,7 @@ Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext)
 
 Token IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->integer = atoi(lexicalAnalyzerContext->lexeme);
+	lexicalAnalyzerContext->semanticValue->id = lexicalAnalyzerContext->lexeme;
 	return ID;
 }
 

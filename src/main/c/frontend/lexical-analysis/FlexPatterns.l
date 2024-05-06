@@ -31,10 +31,10 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-("c"|"d"|"e"|"f"|"g"|"a"|"b")("#"|"b")?([:digit:]|"10")?(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))? { return NoteLexemeAction(createLexicalAnalyzerContext()); }
-("C"|"D"|"E"|"F"|"G"|"A"|"B")("m"|"7"|"maj7"|"dim"|"aug"|"sus2"|"sus4")?(\(([:digit:]|"10")","([:space:])?("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))?("arp")? { return ChordLexemeAction(createLexicalAnalyzerContext()); }
-"R"(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))? { return RestLexemeAction(createLexicalAnalyzerContext()); }
-("f"|"g"|"c")   { return ClefValueLexemeAction(createLexicalAnalyzerContext()); }
+("c"|"d"|"e"|"f"|"g"|"a"|"b")("#"|"b")?([[:digit:]]|"10")?("("("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")")")? { return NoteLexemeAction(createLexicalAnalyzerContext()); }
+("C"|"D"|"E"|"F"|"G"|"A"|"B")("m"|"7"|"maj7"|"dim"|"aug"|"sus2"|"sus4")?("("([[:digit:]]|"10")","([[:space:]]+)?("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")")")?("arp")? { return ChordLexemeAction(createLexicalAnalyzerContext()); }
+"R"("("("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")")")? { return RestLexemeAction(createLexicalAnalyzerContext()); }
+("clefF"|"clefG"|"clefC")   { return ClefValueLexemeAction(createLexicalAnalyzerContext()); }
 
 "Integer"           { return ClassLexemeAction(createLexicalAnalyzerContext()); }                                                                                                       
 "Note"              { return ClassLexemeAction(createLexicalAnalyzerContext()); }
@@ -44,9 +44,9 @@
 
 "|"                 { return PipeLexemeAction(createLexicalAnalyzerContext()); }
 
-[:digit:]"/"[:digit:] { return SignatureValueLexemeAction(createLexicalAnalyzerContext()); } 
+[[:digit:]]([[:space:]]+)?"/"([[:space:]]+)?("2"|"4"|"8"|"16"|"32"|"64"|"128") { return SignatureValueLexemeAction(createLexicalAnalyzerContext()); } 
 
-("piano"|"marimba")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
+("piano"|"marimba"|"guitar"|"trumpet")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
 
 "score"             { return ScoreLexemeAction(createLexicalAnalyzerContext()); }
 "tempo"             { return TempoLexemeAction(createLexicalAnalyzerContext()); }

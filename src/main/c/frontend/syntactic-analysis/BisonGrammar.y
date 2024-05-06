@@ -43,6 +43,12 @@
 	signature * signatureType;
 	score * scoreType;
 	pitch * pitchType;
+	expressions * expressionsType;
+	programExpression * programExpressionType;
+	chordExpression * chordExpressionType;
+	chordValues * chordValuesType;
+	tabExpression * tabExpressionType;
+	tabValues * tabValuesType;
 
 	Expression * expression;
 	Program * program;
@@ -130,6 +136,12 @@
 %type <signatureType> signature
 %type <scoreType> score
 %type <pitchType> pitch
+%type <expressionsType> expressions
+%type <programExpressionType> programExpression
+%type <chordExpressionType> chordExpression
+%type <chordValuesType> chordValues
+%type <tabExpressionType> tabExpression
+%type <tabValuesType> tabValues
 
 %type <expression> expression
 %type <program> program
@@ -142,9 +154,18 @@
 
 
 %%
+/**
 program: assignment 												{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
 	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }		
 	;
+*/
+program: expressions 										{ $$ = ExpressionsProgramSemanticAction(currentCompilerState(), $1); }
+
+expressions: programExpression expressions 	{ $$ = ExpressionsProgramExpressionExpressionsSemanticAction($1, $2); }
+	| programExpression 											{ $$ = ExpressionsProgramExpressionSemanticAction($1); }
+
+programExpression: assignment								{ $$ = ProgramExpressionAssignmentSemanticAction($1); }
+	| expression															{ $$ = ProgramExpressionExpressionSemanticAction($1); }
 
 assignment: type id EQUAL expression								{ $$ = AssignmentSemanticAction($1, $2, $4); }
 	;
@@ -162,10 +183,30 @@ type: NOTECLASS 	{ $$ = TypeSemanticAction($1); }
 
 expression: noteExpression 											{ $$ = expressionNoteExpresionSemanticAction($1); }
 	| score												{ $$ = expressionScoreExpressionSemanticAction($1); }
+	| chordExpression							{ $$ = expressionChordExpressionSemanticAction($1); }
+	| pitch SEMICOLON									{ $$ = expressionPitchSemanticAction($1); }
+	| tabExpression										{ $$ = expressionTabExpression($1); }
 	;
 
 noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA pitch COMMA instrument CLOSE_PARENTHESIS SEMICOLON		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
 	;
+
+chordExpression: CHORDCLASS OPEN_PARENTHESIS chordValues CLOSE_PARENTHESIS SEMICOLON			{ $$ = chordExpressionSemanticAction($3); }
+	;
+
+chordValues: note COMMA chordValues						{ $$ = chordValuesChordValuesSemanticAction($1, $3); }
+	| note																			{ $$ = chordValuesNoteSemanticAction($1); }
+	;
+
+tabExpression: TABCLASS OPEN_PARENTHESIS tabValues CLOSE_PARENTHESIS SEMICOLON			{ $$ = tabExpressionSemanticAction($3); }
+	;
+
+tabValues: note tabValues								{ $$ = tabValuesNoteTabValuesSemanticAction($1, $2); }
+	| chord tabValues											{ $$ = tabValuesChordTabValuesSemanticAction($1, $2); }
+	| rest tabValues											{ $$ = tabValuesRestTabValuesSemanticAction($1, $2); }
+	| note																{ $$ = tabValuesNoteTabValuesSemanticAction($1, NULL); }
+	| chord																{ $$ = tabValuesChordTabValuesSemanticAction($1, NULL); }
+	| rest																{ $$ = tabValuesRestTabValuesSemanticAction($1, NULL); }
 
 pitch: INTEGER													{ $$ = PitchSemanticAction($1); }
 	;
@@ -188,7 +229,7 @@ scoreExpression: declaration instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$
 declaration: tempo signature				{ $$ = DeclarationSemanticAction($1, $2); }
 	;
 
-tempo: TEMPO TEMPOVALUE SEMICOLON			{ $$ = tempoSemanticAction($2); }
+tempo: TEMPO INTEGER SEMICOLON			{ $$ = tempoSemanticAction($2); }
 	;
 
 signature: SIGNATURE SIGNATUREVALUE SEMICOLON		{ $$ = signatureSemanticAction($2); }
@@ -224,13 +265,14 @@ tab: note tab 					{ $$ = tabNoteTabSemanticAction($1, $2); }
 	;
 
 rest: REST					{ $$ = restSemanticAction($1); }
+/**
 // expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 //	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
 //	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 //	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 //	| factor														{ $$ = FactorExpressionSemanticAction($1); }
 //	;
-/* 
+
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;

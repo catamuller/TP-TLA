@@ -1,0 +1,16 @@
+score myScore {
+    {
+        tempo 200;
+        signature 4/4;
+        piano {
+            clef clefG;
+            tabs {
+                c d e f | g a b c
+            }
+            clef f;
+            tabs myTabs {
+                c d e f | g a b c
+            }
+        }
+    }
+}

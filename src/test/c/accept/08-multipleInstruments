@@ -1,0 +1,18 @@
+score myScore {
+{
+	tempo 200;
+	signature 4/4;
+	piano {
+		clef clefG;
+		tabs {
+		    C(w) | C(w) | C(w) | C(w)
+		}
+
+	}
+	trombone {
+		clef clefF;
+             tabs {
+                   c4(q) d4(q) e4(q) c4(q) | c4(q) d4(q) e4(q) c4(q) | e4(q) f4(q) g4(h) | e4(q) f4(q) g4(h)
+             }
+	}
+}

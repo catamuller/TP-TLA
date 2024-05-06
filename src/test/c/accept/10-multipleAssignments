@@ -1,0 +1,4 @@
+Integer myPitch = 7;
+Note myNote = Note(c,7,marimba);
+Chord myChord = Chord(c, e, g, d#);
+Integer myPitch2 = 15;

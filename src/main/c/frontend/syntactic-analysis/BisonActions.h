@@ -18,14 +18,14 @@ void shutdownBisonActionsModule();
  * Bison semantic actions.
  */
 
-/*
+/**
 Constant * IntegerConstantSemanticAction(const int value);
 Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type);
 Expression * FactorExpressionSemanticAction(Factor * factor);
 Factor * ConstantFactorSemanticAction(Constant * constant);
 Factor * ExpressionFactorSemanticAction(Expression * expression);
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
-*/
+
 
 // Constant * IntegerConstantSemanticAction(const int value) {
 // 	_logSyntacticAnalyzerAction(__FUNCTION__);
@@ -42,8 +42,8 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 // 	expression->type = FACTOR;
 // 	return expression;
 // }
-
-/*
+*/
+/**
 Factor * ConstantFactorSemanticAction(Constant * constant) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
@@ -60,6 +60,23 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	return factor;
 }
 */
+
+Program * ExpressionsProgramSemanticAction(CompilerState * compilerState, expressions * expressions);
+
+Expression * expressionChordExpressionSemanticAction(chordExpression * _chordExpression);
+
+chordExpression * chordExpressionSemanticAction(chordValues * _chordValues);
+
+chordValues * chordValuesChordValuesSemanticAction(note * _note, chordValues * _chordValues);
+
+expressions * ExpressionsProgramExpressionExpressionsSemanticAction(programExpression * _programExpression, expressions * _expressions);
+
+expressions * ExpressionsProgramExpressionSemanticAction(programExpression * _programExpression);
+
+programExpression * ProgramExpressionAssignmentSemanticAction(assignment * _assignment);
+
+programExpression * ProgramExpressionExpressionSemanticAction(Expression * _expression);
+
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
 
 Program * AssignmentProgramSemanticAction(CompilerState * compilerState, assignment * _assignment);
@@ -96,6 +113,20 @@ instrument * InstrumentSemanticAction(Instrument _instrument);
 scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instrument * _instrument, sentences * _sentences);
 
 Expression * expressionNoteExpressionSemanticAction(noteExpression * _noteExpression);
+
+chordValues * chordValuesNoteSemanticAction(note * note_);
+
+Expression * expressionPitchSemanticAction(pitch * _pitch);
+
+tabExpression * tabExpressionSemanticAction(tabValues * _tabValues);
+
+tabValues * tabValuesNoteTabValuesSemanticAction(note * _note, tabValues * _tabValues);
+
+tabValues * tabValuesChordTabValuesSemanticAction(chord * _chord, tabValues * _tabValues);
+
+tabValues * tabValuesRestTabValuesSemanticAction(rest * _rest, tabValues * _tabValues);
+
+Expression * expressionTabExpression(tabExpression * _tabExpression);
 
 Expression * expressionScoreExpressionSemanticAction(score * _scoreExpression);
 

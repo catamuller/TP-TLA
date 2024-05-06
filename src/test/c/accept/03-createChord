@@ -1,0 +1,1 @@
+Chord myChord = Chord(c, e, g, d#);

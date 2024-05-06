@@ -1,0 +1,5 @@
+Note myNote = Note(c,7,piano);
+Note myNote2 = Note(bb,9,marimba);
+Note myNote3 = Note(c#,1,guitar);
+Note myNote4 = Note(eb,11,trumpet);
+Note myNote5 = Note(c,2,piano);

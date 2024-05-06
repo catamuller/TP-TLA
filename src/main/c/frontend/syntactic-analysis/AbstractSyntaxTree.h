@@ -15,13 +15,30 @@ void shutdownAbstractSyntaxTreeModule();
  */
 enum ExpressionType {
 	NOTEEXPRESSION,
-	SCOREEXPRESSION
+	SCOREEXPRESSION,
+	CHORDEXPRESSION,
+	PITCHEXPRESSION,
+	TABEXPRESSIONTYPE
 };
 
 // enum FactorType {
 // 	CONSTANT,
 // 	EXPRESSION
 // };
+
+enum ExpressionsType {
+	EXPRESSIONSTYPE,
+	PROGRAMEXPRESSIONTYPE
+};
+
+enum tabValuesType {
+	NOTETABVALUES,
+	CHORDTABVALUES,
+	RESTTABVALUES,
+	TABVALUESNOTE,
+	TABVALUESCHORD,
+	TABVALUESREST
+};
 
 enum SentencesType {
 	SENTENCE,
@@ -44,7 +61,12 @@ enum ProgramType {
 	ASSIGNMENT,
 	EXPRESSION
 };
+enum ChordValuesType{
+	CHORDVALUES,
+	CHORDNOTE
+};
 
+typedef enum tabValuesType tabValuesType;
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
 typedef enum SentencesType SentencesType;
@@ -52,6 +74,8 @@ typedef enum SentenceType SentenceType;
 typedef enum TabsType TabsType;
 typedef enum TabType TabType;
 typedef enum ProgramType ProgramType;
+typedef enum ExpressionsType ExpressionsType;
+typedef enum ChordValuesType ChordValuesType;
 
 
 typedef struct Constant Constant;
@@ -80,6 +104,12 @@ typedef struct tempo tempo;
 typedef struct signature signature;
 typedef struct score score;
 typedef struct pitch pitch;
+typedef struct expressions expressions;
+typedef struct programExpression programExpression;
+typedef struct chordExpression chordExpression;
+typedef struct chordValues chordValues;
+typedef struct tabExpression tabExpression;
+typedef struct tabValues tabValues;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -134,20 +164,6 @@ struct tabs {
 	TabsType tabsType;
 };
 
-/*
-struct tabs {
-	union {
-		struct {
-			tab * _tab_;
-			tabs * _tabs; 
-		};
-		tab * _tab;
-	};
-	TabsType tabsType;
-};
-
-*/
-
 struct id {
 	IDM id;
 };
@@ -183,7 +199,7 @@ struct scoreExpression {
 
 
 struct assignment {
-	type * class;
+	type * _class;
 	id * _id;
 	Expression * expression;
 };
@@ -219,6 +235,34 @@ struct noteExpression {
 	instrument * _instrument;
 };
 
+struct chordExpression {
+	chordValues * _chordValues;
+};
+
+struct chordValues {
+	union {
+		struct {
+			note * _note;
+			chordValues * _chordValues;
+		};
+		note * note_;
+	};
+	ChordValuesType type;
+};
+
+struct tabExpression {
+	tabValues * _tabValues;
+};
+
+struct tabValues {
+	union {
+		note * _note;
+		chord * _chord;
+		rest * _rest;
+	};
+	tabValues * _tabValues;
+	tabValuesType type;
+};
 
 /*
 struct Constant {
@@ -237,11 +281,14 @@ struct Expression {
 	union {
 		noteExpression * noteExpression;
 		score * _score;
+		chordExpression * _chordExpression;
+		pitch * _pitch;
+		tabExpression * _tabExpression;
 	};
 	ExpressionType type;
 };
 
-struct Program {
+struct programExpression {
 	union {
 		assignment * assignment;
 		Expression * expression;
@@ -249,10 +296,26 @@ struct Program {
 	ProgramType type;
 };
 
+
+struct expressions {
+	union {
+		struct {
+			programExpression * _programExpression;
+			expressions * expressions;
+		};
+		programExpression * programExpression_;
+	};
+	ExpressionsType type;
+};
+
+struct Program {
+	expressions * _expressions;
+};
+
 /**
  * Node recursive destructors.
  */
-// void releaseConstant(Constant * constant);  // check
+// void releaseConstant(Constant * constant); 
 // void releaseFactor(Factor * factor); 
 void releaseProgram(Program * program);
 void releaseAssignment(assignment * assignment);
@@ -260,19 +323,27 @@ void releaseExpression(Expression * expression);
 void releaseScore(score * _score);
 void releaseId(id * _id);
 // void releaseType(Type * type);
-void releaseNoteExpression(noteExpression * noteExpression); // check
-void releaseScoreExpression(scoreExpression * scoreExpression); // check
-void releaseChord(chord * chord); // check
-void releaseNote(note * note); // check 
-void releaseInstrument(instrument * instrument); // check
-void releaseSentences(sentences * sentences); // check
-void releaseSentence(sentence * sentence); // check
-void releaseClefSentence(clefSentence * clefSentence); // check
-void releaseTabsSentence(tabsSentence * tabsSentence); // check
-void releaseClef(clef * clef); // check
-void releaseTabs(tabs * tabs); // check
-void releaseTab(tab * tab); // check
-void releaseRest(rest * rest); // check
-
-
+void releaseProgramExpression(programExpression * _programExpression);
+void releaseNoteExpression(noteExpression * noteExpression);
+void releaseScoreExpression(scoreExpression * scoreExpression);
+void releaseChord(chord * chord);
+void releaseNote(note * note);
+void releaseInstrument(instrument * instrument);
+void releaseSentences(sentences * sentences);
+void releaseSentence(sentence * sentence);
+void releaseClefSentence(clefSentence * clefSentence);
+void releaseTabsSentence(tabsSentence * tabsSentence);
+void releaseClef(clef * clef);
+void releaseTabs(tabs * tabs);
+void releaseTab(tab * tab);
+void releaseRest(rest * rest);
+void releaseExpressions(expressions * _expressions);
+void releaseChordExpression(chordExpression * _chordExpression);
+void releaseChordValues(chordValues * _chordValues);
+void releasePitch(pitch * _pitch);
+void releaseDeclaration(declaration * _declaration);
+void releaseTempo(tempo * _tempo);
+void releaseSignature(signature * _signature);
+void releaseTabValues(tabValues * _tabValues);
+void releaseTabExpression(tabExpression * _tabExpression);
 #endif

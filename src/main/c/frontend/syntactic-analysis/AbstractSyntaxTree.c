@@ -60,9 +60,9 @@ void releaseFactor(Factor * factor) {
 */
 
 void releaseAssignment(assignment * _assignment){
-	logDebugging(_logger, "Executeing destructor: %s", __FUNCTION__);
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_assignment != NULL) {
-		free(_assignment->class);
+		free(_assignment->_class);
 		releaseExpression(_assignment->expression);
 		free(_assignment);
 	}
@@ -70,16 +70,28 @@ void releaseAssignment(assignment * _assignment){
 void releaseProgram(Program * _program){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_program != NULL) {
-		switch (_program->type)
-		{
-		case EXPRESSION:
-			releaseExpression(_program->expression);
-			break;
-		case ASSIGNMENT:
-			releaseAssignment(_program->assignment);
-			break;
-		}
+		releaseExpressions(_program->_expressions);
+		free(_program);
 	}
+	
+}
+
+void releaseExpressions(expressions * _expressions) {
+		logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+		if (_expressions != NULL) {
+			switch (_expressions->type)
+			{
+			case EXPRESSIONSTYPE:
+				releaseProgramExpression(_expressions->programExpression_);
+				releaseExpressions(_expressions->expressions);
+				break;
+			case PROGRAMEXPRESSIONTYPE:
+				releaseProgramExpression(_expressions->_programExpression);
+				break;
+			}
+			free(_expressions);
+		}
+		
 }
 
 void releaseId(id * _id) {
@@ -112,11 +124,64 @@ void releaseExpression(Expression * expression) {
 			case SCOREEXPRESSION:
 				releaseScore(expression->_score);
 				break;
+			case PITCHEXPRESSION:
+				releasePitch(expression->_pitch);
+				break;
+			case CHORDEXPRESSION:
+				releaseChordExpression(expression->_chordExpression);
+				break;
+			case TABEXPRESSIONTYPE:
+				releaseTabExpression(expression->_tabExpression);
+				break;
 		}
 		free(expression);
 	}	
 }
 
+void releaseChordExpression(chordExpression * _chordExpression){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_chordExpression != NULL) {
+		releaseChordValues(_chordExpression->_chordValues);
+		free(_chordExpression);
+	}
+}
+
+void releasePitch(pitch * _pitch){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_pitch!=NULL){
+		free(_pitch);
+	}
+}
+
+void releaseChordValues(chordValues * _chordValues){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_chordValues!=NULL){
+		switch(_chordValues->type){
+			case CHORDVALUES:
+				releaseNote(_chordValues->_note);
+				break;
+			case CHORDNOTE:
+				releaseChordValues(_chordValues->_chordValues);
+				break;
+		}
+		free(_chordValues);
+	}
+}
+
+void releaseProgramExpression(programExpression * _programExpression) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_programExpression != NULL) {
+		switch(_programExpression->type){
+		case ASSIGNMENT:
+			releaseAssignment(_programExpression->assignment);
+			break;
+		case EXPRESSION:
+			releaseExpression(_programExpression->expression);
+			break;
+		}
+		free(_programExpression);
+	}
+}
 
 void releaseNoteExpression(noteExpression * noteExpression){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
@@ -130,6 +195,12 @@ void releaseScoreExpression(scoreExpression * scoreExpression){
 	if (scoreExpression != NULL) {
 		if (scoreExpression->instrument != NULL) {
 			releaseInstrument(scoreExpression->instrument);
+		}
+		if(scoreExpression->_declaration != NULL){
+			releaseDeclaration(scoreExpression->_declaration);
+		}
+		if(scoreExpression->_sentences != NULL){
+			releaseSentences(scoreExpression->_sentences);
 		}
 		free(scoreExpression);
 	}
@@ -205,7 +276,6 @@ void releaseClefSentence(clefSentence * clefSentence){
 	}
 }
 void releaseTabsSentence(tabsSentence * tabsSentence){
-
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (tabsSentence != NULL) {
 		if (tabsSentence->_tabs!= NULL) {
@@ -265,8 +335,6 @@ void releaseTab(tab * tab){
 		}
 		free(tab);
 	}
-
-
 }
 void releaseRest(rest * rest){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
@@ -275,5 +343,78 @@ void releaseRest(rest * rest){
 			free(rest->rest);
 		}
 		free(rest);
+	}
+}
+
+void releaseType(type * _type){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_type != NULL) {
+		free(_type);
+	}
+}
+
+void releaseDeclaration(declaration * _declaration){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_declaration != NULL) {
+		if (_declaration->_tempo != NULL) {
+			releaseTempo(_declaration->_tempo);
+		}
+		if(_declaration->_signature != NULL){
+			releaseSignature(_declaration->_signature);
+		}
+		free(_declaration);
+	}
+}
+
+void releaseTempo(tempo * _tempo) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_tempo != NULL) {
+		free(_tempo);
+	}
+}
+
+void releaseSignature(signature * _signature) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_signature!=NULL){
+		free(_signature->signature);
+		free(_signature);
+	}
+}
+
+void releaseTabExpression(tabExpression * _tabExpression) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_tabExpression!=NULL){
+		releaseTabValues(_tabExpression->_tabValues);
+		free(_tabExpression);
+	}
+}
+
+void releaseTabValues(tabValues * _tabValues){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_tabValues!=NULL){
+		switch(_tabValues->type){
+			case NOTETABVALUES:
+				releaseNote(_tabValues->_note);
+				releaseTabValues(_tabValues->_tabValues);
+				break;
+			case CHORDTABVALUES:
+				releaseChord(_tabValues->_chord);
+				releaseTabValues(_tabValues->_tabValues);
+				break;
+			case RESTTABVALUES:
+				releaseRest(_tabValues->_rest);
+				releaseTabValues(_tabValues->_tabValues);
+				break;
+			case TABVALUESNOTE:
+				releaseNote(_tabValues->_note);
+				break;
+			case TABVALUESCHORD:
+				releaseChord(_tabValues->_chord);
+				break;
+			case TABVALUESREST:
+				releaseRest(_tabValues->_rest);
+				break;
+		}
+		free(_tabValues);
 	}
 }
