@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.22)
 # Name of the project and language to use (C, in this case).
 project(Compiler C)
 
+
 # Compiles the parser with Bison, generating counter-examples in case S/R or R/R conflicts exists.
 add_custom_command(
 	OUTPUT ../src/main/c/frontend/syntactic-analysis/BisonParser.c ../src/main/c/frontend/syntactic-analysis/BisonParser.h
@@ -19,6 +20,7 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
 	add_compile_options(-static-libgcc)
 	add_compile_options(-std=gnu99)
 	add_compile_options(-O3)
+	add_compile_options(-g)
 
 	# Compiles the scanner with Flex.
 	add_custom_command(
