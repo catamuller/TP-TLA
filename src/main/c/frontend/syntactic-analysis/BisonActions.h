@@ -77,6 +77,14 @@ type * TypeSemanticAction(Class class);
 
 noteExpression * noteExpressionSemanticAction(note * _note, pitch * pitch, instrument * instrument);
 
+declaration * DeclarationSemanticAction(tempo * _tempo, signature * _signature);
+
+score * scoreSemanticAction(id * _id, scoreExpression * _scoreExpression);
+
+tempo * tempoSemanticAction(Integer _tempo);
+
+signature * signatureSemanticAction(Signature signature_);
+
 note * NoteSemanticAction(Note _note);
 
 id * IDSemanticAction(IDM _id);
@@ -111,8 +119,10 @@ sentence * sentenceClefSentenceSemanticAction(clefSentence * _clefSentence);
 
 sentence * sentenceTabsSentenceSemanticAction(tabsSentence * _tabsSentence);
 
-sentences * sentencesSentenceSentencesSemanticAction(sentence * param_sentence,sentences * param_sentences, SentencesType type);
+sentences * sentencesSentenceSentencesSemanticAction(sentence * param_sentence,sentences * param_sentences, int type);
 
-sentences * sentencesSemanticAction(sentence * param_sentence, SentencesType type);
+sentences * sentencesSentenceSemanticAction(sentence * param_sentence, SentencesType type);
+
+rest * restSemanticAction(Rest _rest);
 
 #endif

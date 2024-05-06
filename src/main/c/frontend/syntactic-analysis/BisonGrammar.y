@@ -142,10 +142,6 @@
 
 
 %%
-
-/* Producciones    --------->  Semantic Action del antecedente de la producción */
-
-/*aca nomas manito :D*/
 program: assignment 												{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
 	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }		
 	;
@@ -156,7 +152,11 @@ assignment: type id EQUAL expression								{ $$ = AssignmentSemanticAction($1, 
 id: ID																{ $$ = IDSemanticAction($1); }							
 	;
 
-type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	{ $$ = TypeSemanticAction($1); }
+type: NOTECLASS 	{ $$ = TypeSemanticAction($1); }
+	| CHORDCLASS 		{ $$ = TypeSemanticAction($1); }
+	| TABCLASS 			{ $$ = TypeSemanticAction($1); }
+	| RESTCLASS 		{ $$ = TypeSemanticAction($1); }
+	| INTEGERCLASS	{ $$ = TypeSemanticAction($1); }
 	;
 
 
@@ -164,9 +164,6 @@ expression: noteExpression 											{ $$ = expressionNoteExpresionSemanticActi
 	| score												{ $$ = expressionScoreExpressionSemanticAction($1); }
 	;
 
-/*
-*Asumo que Noteclass va implicito con noteExpression, commo el = con Assignment
-*/
 noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA pitch COMMA instrument CLOSE_PARENTHESIS SEMICOLON		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
 	;
 
@@ -182,19 +179,19 @@ chord: CHORD														{ $$ = ChordSemanticAction($1); }
 instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction($1); }
 	;
 
-score: SCORE id OPEN_BRACES scoreExpression CLOSE_BRACES
+score: SCORE id OPEN_BRACES scoreExpression CLOSE_BRACES		{ $$ = scoreSemanticAction($2, $4); }
 	;
 
-scoreExpression: declaration instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = ScoreExpressionSemanticAction($1, $2, $3); }
+scoreExpression: declaration instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = ScoreExpressionSemanticAction($1, $2, $4); }
 	;
 
-declaration: tempo signature
+declaration: tempo signature				{ $$ = DeclarationSemanticAction($1, $2); }
 	;
 
-tempo: TEMPO TEMPOVALUE SEMICOLON
+tempo: TEMPO TEMPOVALUE SEMICOLON			{ $$ = tempoSemanticAction($2); }
 	;
 
-signature: SIGNATURE SIGNATUREVALUE SEMICOLON
+signature: SIGNATURE SIGNATUREVALUE SEMICOLON		{ $$ = signatureSemanticAction($2); }
 	;
 
 sentences: sentence sentences							{ $$ = sentencesSentenceSentencesSemanticAction($1, $2, SENTENCES); }
@@ -205,13 +202,13 @@ sentence: clefSentence									{ $$ = sentenceClefSentenceSemanticAction($1); }
 	| tabsSentence										{ $$ = sentenceTabsSentenceSemanticAction($1); }
 	;
 
-clefSentence: CLEF clef SEMICOLON						{ $$ = clefSentenceSemanticAction($1); }
+clefSentence: CLEF clef SEMICOLON						{ $$ = clefSentenceSemanticAction($2); }
 	;
 
 clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 	;
 
-tabsSentence: TABS OPEN_BRACES tabs CLOSE_BRACES		{ $$ = tabsSentenceSemanticAction($1); }
+tabsSentence: TABS OPEN_BRACES tabs CLOSE_BRACES		{ $$ = tabsSentenceSemanticAction($3); }
 	;
 
 tabs: tab PIPE tabs 			{ $$ = tabsPipeSemanticAction($1, $3); }
@@ -226,7 +223,7 @@ tab: note tab 					{ $$ = tabNoteTabSemanticAction($1, $2); }
 	| rest 						{ $$ = tabRestTabSemanticAction($1, NULL); }
 	;
 
-rest: REST
+rest: REST					{ $$ = restSemanticAction($1); }
 // expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 //	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
 //	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }

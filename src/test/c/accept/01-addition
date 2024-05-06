@@ -1,1 +1,10 @@
-Note id = Note(c,7,piano);
+score testScore {
+  tempo 200;
+  signature 4/4;
+  piano {
+    clef g;
+    tabs {
+      c d e f | g a b R
+    }
+  }
+}

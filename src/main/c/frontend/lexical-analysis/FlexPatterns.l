@@ -31,10 +31,10 @@
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
-("f"|"g"|"c")   { return ClefValueLexemeAction(createLexicalAnalyzerContext()); }
 ("c"|"d"|"e"|"f"|"g"|"a"|"b")("#"|"b")?([:digit:]|"10")?(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))? { return NoteLexemeAction(createLexicalAnalyzerContext()); }
 ("C"|"D"|"E"|"F"|"G"|"A"|"B")("m"|"7"|"maj7"|"dim"|"aug"|"sus2"|"sus4")?(\(([:digit:]|"10")","([:space:])?("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))?("arp")? { return ChordLexemeAction(createLexicalAnalyzerContext()); }
 "R"(\(("w"|"h"|"q"|"i"|"s"|"t"|"x"|"o")\))? { return RestLexemeAction(createLexicalAnalyzerContext()); }
+("f"|"g"|"c")   { return ClefValueLexemeAction(createLexicalAnalyzerContext()); }
 
 "Integer"           { return ClassLexemeAction(createLexicalAnalyzerContext()); }                                                                                                       
 "Note"              { return ClassLexemeAction(createLexicalAnalyzerContext()); }

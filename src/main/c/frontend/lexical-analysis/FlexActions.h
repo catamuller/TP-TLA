@@ -53,7 +53,7 @@ Token ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token PipeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 
-IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token ScoreLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TempoLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

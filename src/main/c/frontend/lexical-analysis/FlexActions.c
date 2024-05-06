@@ -110,7 +110,7 @@ Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
-	lexicalAnalyzerContext->semanticValue->clef = lexicalAnalyzerContext->lexeme;
+	lexicalAnalyzerContext->semanticValue->clef = lexicalAnalyzerContext->lexeme[0];
 	return CLEF;
 }
 
@@ -220,9 +220,9 @@ Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext)
 	return TRANSPOSE;
 }
 
-IDM IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token IDLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->integer = lexicalAnalyzerContext->lexeme;
+	lexicalAnalyzerContext->semanticValue->integer = atoi(lexicalAnalyzerContext->lexeme);
 	return ID;
 }
 
