@@ -32,6 +32,8 @@ static void _output(const unsigned int indentationLevel, const char * const form
  * Converts and expression type to the proper character of the operation
  * involved, or returns '\0' if that's not possible.
  */
+
+/*
 static const char _expressionTypeToCharacter(const ExpressionType type) {
 	switch (type) {
 		case ADDITION: return '+';
@@ -43,15 +45,19 @@ static const char _expressionTypeToCharacter(const ExpressionType type) {
 			return '\0';
 	}
 }
+*/
 
 /**
  * Generates the output of a constant.
  */
+
+/*
 static void _generateConstant(const unsigned int indentationLevel, Constant * constant) {
 	_output(indentationLevel, "%s", "[ $C$, circle, draw, black!20\n");
 	_output(1 + indentationLevel, "%s%d%s", "[ $", constant->value, "$, circle, draw ]\n");
 	_output(indentationLevel, "%s", "]\n");
 }
+*/
 
 /**
  * Creates the epilogue of the generated output, that is, the final lines that
@@ -69,6 +75,8 @@ static void _generateEpilogue(const int value) {
 /**
  * Generates the output of an expression.
  */
+
+/*
 static void _generateExpression(const unsigned int indentationLevel, Expression * expression) {
 	_output(indentationLevel, "%s", "[ $E$, circle, draw, black!20\n");
 	switch (expression->type) {
@@ -89,10 +97,13 @@ static void _generateExpression(const unsigned int indentationLevel, Expression 
 	}
 	_output(indentationLevel, "%s", "]\n");
 }
+*/
 
 /**
  * Generates the output of a factor.
  */
+
+/*
 static void _generateFactor(const unsigned int indentationLevel, Factor * factor) {
 	_output(indentationLevel, "%s", "[ $F$, circle, draw, black!20\n");
 	switch (factor->type) {
@@ -110,6 +121,7 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 	}
 	_output(indentationLevel, "%s", "]\n");
 }
+*/
 
 /**
  * Generates the output of the program.

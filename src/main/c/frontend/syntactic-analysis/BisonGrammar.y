@@ -21,8 +21,8 @@
 	Token token;
 
 	/** Non-terminals. */
-	Assignment * assignment;
-	Type * type;
+	assignment * assignment;
+	type * type;
 	noteExpression * noteExpression;
 	scoreExpression * scoreExpression;
 	chord * chordType;
@@ -33,10 +33,12 @@
 	clefSentence * clefSentence;
 	tabsSentence * tabsSentence;
 	clef * clefType;
+	tabs * tabsType;
+	tab * tabType;
+	rest * restType;
+	id * idType;
 
-	Constant * constant;
 	Expression * expression;
-	Factor * factor;
 	Program * program;
 }
 
@@ -110,10 +112,12 @@
 %type <clefSentence> clefSentence
 %type <tabsSentence> tabsSentence
 %type <clefType> clef
+%type <tabsType> tabs
+%type <tabType> tab
+%type <restType> rest
+%type <idType> id
 
-%type <constant> constant
 %type <expression> expression
-%type <factor> factor
 %type <program> program
 
 /**
@@ -126,64 +130,82 @@
 
 %%
 
-program: assignment													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
+/* Producciones    --------->  Semantic Action del antecedente de la producción */
+
+/*aca nomas manito :D*/
+program: assignment 												{ $$ = AssignmentProgramSemanticAction(currentCompilerState(), $1); }
+	| expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }		
 	;
 
-assignment: type ID EQUAL expression								{ $$ = AssignmentSemanticAction(currentCompilerState(), $1, $2, $4); }
+assignment: type id EQUAL expression								{ $$ = AssignmentSemanticAction($1, $2, $4); }
 	;
 
-type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	{ $$ = TypeSemanticAction(currentCompilerState(), $1); }
+id: ID																{ $$ = IDSemanticAction($1); }							
 	;
 
-/*TODO #################################### ∇×E=-∂B/∂t*/
-expression: noteExpression | scoreExpression						{ $$ = ExpressionSemanticAction(currentCompilerState(), $1); }							
+type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	{ $$ = TypeSemanticAction($1); }
+	;
+
+
+expression: noteExpression 											{ $$ = expressionNoteExpresionSemanticAction($1); }
+	| scoreExpression												{ $$ = expressionScoreExpressionSemanticAction($1); }
 	;
 
 /*
 *Asumo que Noteclass va implicito con noteExpression, commo el = con Assignment
 */
-noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS		{ $$ = noteExpressionSemanticAction(currentCompilerState(), $3, $5, $7); }	
+noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
 	;
 
-note: NOTE															{ $$ = NoteSemanticAction(currentCompilerState(), $1); }
+note: NOTE															{ $$ = NoteSemanticAction($1); }
 	;
 
-chord: CHORD														{ $$ = ChordSemanticAction(currentCompilerState(), $1); }
+chord: CHORD														{ $$ = ChordSemanticAction($1); }
 	;
 
-instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction(currentCompilerState(), $1); }
+instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction($1); }
 	;
 
-scoreExpression: instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = scoreExpressionSemanticAction(currentCompilerState(), $1, $3); }
+scoreExpression: instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = ScoreExpressionSemanticAction($1, $3); }
 	;
 
-/*lindo quilombo con las s >:| */
-sentences: sentence sentences							{ $$ = sentencesSentenceSentencesSemanticAction(currentCompilerState(), $1, $3); }
-	| sentence											{ $$ = sentencesSentenceSemanticAction(currentCompilerState(), $1); }
+sentences: sentence sentences							{ $$ = sentencesSentenceSentencesSemanticAction($1, $2, SENTENCES); }
+	| sentence											{ $$ = sentencesSentenceSemanticAction($1, SENTENCE); }
 	;
 
-sentence: clefSentence									{ $$ = sentenceClefSentenceSemanticAction(currentCompilerState(), $1); }
-	| tabsSentence										{ $$ = sentenceTabsSentenceSemanticAction(currentCompilerState(), $1); }
+sentence: clefSentence									{ $$ = sentenceClefSentenceSemanticAction($1); }
+	| tabsSentence										{ $$ = sentenceTabsSentenceSemanticAction($1); }
 	;
 
-clefSentence: CLEF clef SEMICOLON
+clefSentence: CLEF clef SEMICOLON						{ $$ = clefSentenceSemanticAction($1); }
 	;
 
-clef: CLEFVALUE
+clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 	;
 
-tabsSentence: TABS OPEN_BRACES tabs CLOSE_BRACES
+tabsSentence: TABS OPEN_BRACES tabs CLOSE_BRACES		{ $$ = tabsSentenceSemanticAction($1); }
 	;
 
-tabs: tabs
+tabs: tab PIPE tabs 			{ $$ = tabsPipeSemanticAction($1, $3); }
+	| tab						{ $$ = tabsTabSemanticAction($1); }
 	;
+
+tab: note tab 					{ $$ = tabNoteTabSemanticAction($1, $2); }
+	| chord tab 				{ $$ = tabChordTabSemanticAction($1, $2); }
+	| rest tab 					{ $$ = tabRestTabSemanticAction($1, $2); }
+	| note 						{ $$ = tabNoteTabSemanticAction($1, NULL); }
+	| chord						{ $$ = tabChordTabSemanticAction($1, NULL); }
+	| rest 						{ $$ = tabRestTabSemanticAction($1, NULL); }
+	;
+
+rest: REST
 // expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 //	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }
 //	| expression[left] MUL expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, MULTIPLICATION); }
 //	| expression[left] SUB expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, SUBTRACTION); }
 //	| factor														{ $$ = FactorExpressionSemanticAction($1); }
 //	;
-
+/* 
 factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorSemanticAction($2); }
 	| constant														{ $$ = ConstantFactorSemanticAction($1); }
 	;
@@ -191,4 +213,4 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 	;
 
-%%
+%% */

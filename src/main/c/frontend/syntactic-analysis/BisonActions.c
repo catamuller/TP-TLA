@@ -31,30 +31,23 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-Constant * IntegerConstantSemanticAction(const int value) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Constant * constant = calloc(1, sizeof(Constant));
-	constant->value = value;
-	return constant;
-}
+// Constant * IntegerConstantSemanticAction(const int value) {
+// 	_logSyntacticAnalyzerAction(__FUNCTION__);
+// 	Constant * constant = calloc(1, sizeof(Constant));
+// 	constant->value = value;
+// 	return constant;
+// }
+// 
+// 
+// Expression * FactorExpressionSemanticAction(Factor * factor) {
+// 	_logSyntacticAnalyzerAction(__FUNCTION__);
+// 	Expression * expression = calloc(1, sizeof(Expression));
+// 	expression->factor = factor;
+// 	expression->type = FACTOR;
+// 	return expression;
+// }
 
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->leftExpression = leftExpression;
-	expression->rightExpression = rightExpression;
-	expression->type = type;
-	return expression;
-}
-
-Expression * FactorExpressionSemanticAction(Factor * factor) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->factor = factor;
-	expression->type = FACTOR;
-	return expression;
-}
-
+/*
 Factor * ConstantFactorSemanticAction(Constant * constant) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Factor * factor = calloc(1, sizeof(Factor));
@@ -70,7 +63,7 @@ Factor * ExpressionFactorSemanticAction(Expression * expression) {
 	factor->type = EXPRESSION;
 	return factor;
 }
-
+*/
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
@@ -85,73 +78,177 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 	return program;
 }
 
-//aca empieza nuestro codigo :D
-Program * ProgramSemanticAction(Assignment * assignment) {
+Program * AssignmentProgramSemanticAction(CompilerState * compilerState, assignment * _assignment) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Program * program = calloc(1, sizeof(Program));
-	Program->assignment = assignment;
-	factor->type = EXPRESSION;
-	return factor;
+	program->assignment = _assignment;
+	compilerState->abstractSyntaxtTree = program;
+	if (0 < flexCurrentContext()) {
+		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
+		compilerState->succeed = false;
+	} else {
+		compilerState->succeed = true;
+	}
+	return program;
 }
 
-Assignment * AssignmentSemanticAction(Type type, char * id, Expression * expression) {
+//aca empieza nuestro codigo :D
+Program * ProgramSemanticAction(assignment * _assignment) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Assignment * assignment = calloc(1, sizeof(Assignment));
-	assignment->id = id;
-	assignment->expression = expression;
-	assignment->type = type;
-	return assignment;
+	Program * program = calloc(1, sizeof(Program));
+	program->assignment = _assignment;
+	return program;
 }
 
-Type * TypeSemanticAction(Class class) {
+assignment * AssignmentSemanticAction(type * _type, char * id, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Type * type = calloc(1, sizeof(Type));
-	type->class = class;
-	return type;
+	assignment * toReturn = calloc(1, sizeof(assignment));
+	toReturn->id = id;
+	toReturn->expression = expression;
+	toReturn->class = _type;
+	return toReturn;
 }
 
-noteExpression * noteExpressionSemanticAction(Note note, int pitch, Instrument instrument) {
+type * TypeSemanticAction(Class class) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	type * _type = calloc(1, sizeof(type));
+	_type->class = class;
+	return _type;
+}
+
+noteExpression * noteExpressionSemanticAction(note * _note, int pitch, instrument * instrument) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	noteExpression * note_expression = calloc(1, sizeof(noteExpression));
-	note_expression->note = note;
+	note_expression->_note = _note;
 	note_expression->pitch = pitch;
-	note_expression->instrument = instrument;
-	return noteExpression;
+	note_expression->_instrument = instrument;
+	return note_expression;
 }
 
-Note * NoteSemanticAction(Note note) {
+note * NoteSemanticAction(Note _note) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Note * note = calloc(1, sizeof(Note));
-	note -> note = note;
-	return note;
+	note * toReturn = calloc(1, sizeof(note));
+	toReturn->note = _note;
+	return toReturn;
 }
 
-Chord * ChordSemanticAction(Chord chord) {
+id * IDSemanticAction(IDM _id) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Chord * chord = calloc(1, sizeof(Chord));
-	chord -> chord = chord;
-	return chord;
+	id * toReturn = calloc(1, sizeof(id));
+	toReturn->id = _id;
+	return toReturn;
 }
 
-Instrument * InstrumentSemanticAction(Instrument instrument) {
+chord * ChordSemanticAction(Chord _chord) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Instrument * instrument = calloc(1, sizeof(Instrument));
-	instrument -> instrument = instrument;
-	return instrument;
+	chord * toReturn = calloc(1, sizeof(chord));
+	toReturn->chord = _chord;
+	return toReturn;
 }
 
-scoreExpression * InstrumentSemanticAction(Instrument instrument, sentences sentences) {
+instrument * InstrumentSemanticAction(Instrument _instrument) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	instrument * toReturn = calloc(1, sizeof(instrument));
+	toReturn->instrument = _instrument;
+	return toReturn;
+}
+
+scoreExpression * ScoreExpressionSemanticAction(instrument * _instrument, sentences * _sentences) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	scoreExpression * score_expression = calloc(1, sizeof(scoreExpression));
-	score_expression->instrument = instrument;
-	score_expression->sentences = sentences;
+	score_expression->instrument = _instrument;
+	score_expression->_sentences = _sentences;
 	return score_expression;
 }
 
-sentences * sentencesSemanticAction(sentences _sentences) {
+clefSentence * clefSentenceSemanticAction(clef * _clef) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	sentence * _sentences = calloc(1, sizeof(_sentences));
-	_sentences -> _sentences = _sentences;
+	clefSentence * toReturn = calloc(1, sizeof(clefSentence));
+	toReturn->_clef = _clef;
+	return toReturn;
+}
 
-	return sentences;
+Expression * expressionScoreExpressionSemanticAction(scoreExpression * _scoreExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * toReturn = calloc(1, sizeof(Expression));
+	toReturn->scoreExpression = _scoreExpression;
+	return toReturn;
+}
+
+Expression * expressionNoteExpressionSemanticAction(noteExpression * _noteExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * toReturn = calloc(1, sizeof(Expression));
+	toReturn->noteExpression = _noteExpression;
+	return toReturn;
+}
+
+clef * clefSemanticAction(Clef _clef) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	clef * toReturn = calloc(1, sizeof(clef));
+	toReturn->clef = _clef;
+	return toReturn;
+}
+
+tabsSentence * tabsSentenceSemanticAction(tabs * _tabs){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tabs * toReturn = calloc(1, sizeof(tabs));
+	toReturn->_tabs = _tabs;
+	return toReturn;
+}
+
+tabs * tabsPipeSemanticAction(tab * _tab, tabs * _tabs) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tabs * toReturn = calloc(1, sizeof(tabs));
+	toReturn->_tab_ = _tab;
+	toReturn->_tabs = _tabs;
+	return toReturn;
+}
+
+tabs * tabsTabSemanticAction(tab * _tab) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tabs * toReturn = calloc(1, sizeof(tabs));
+	toReturn->_tab = _tab;
+	return toReturn;
+}
+
+tab * tabNoteTabSemanticAction(note * _note, tab * _tab) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tab * toReturn = calloc(1, sizeof(tab));
+	toReturn->_note = _note;
+	toReturn->_tab = _tab;
+	return toReturn;
+}
+
+tab * tabChordTabSemanticAction(chord * _chord, tab * _tab) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tab * toReturn = calloc(1, sizeof(tab));
+	toReturn->_chord = _chord;
+	toReturn->_tab = _tab;
+	return toReturn;
+}
+
+tab * tabRestTabSemanticAction(rest * _rest, tab * _tab) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tab * toReturn = calloc(1, sizeof(tab));
+	toReturn->_rest = _rest;
+	toReturn->_tab = _tab;
+	return toReturn;
+}
+
+
+sentences * sentencesSentenceSentencesSemanticAction(sentence * param_sentence,sentences * param_sentences, SentencesType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	sentences * toReturn = calloc(1, sizeof(sentences));
+	toReturn -> _sentences = param_sentences;
+	toReturn -> _sentence_ = param_sentence;
+	toReturn -> sentencesType = type;
+	return toReturn;
+}
+
+sentences * sentencesSentenceSemanticAction(sentence * param_sentence, SentencesType type) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	sentences * toReturn = calloc(1, sizeof(sentences));
+	toReturn -> _sentence = param_sentence;
+	toReturn -> sentencesType = type;
+	return toReturn;
 }

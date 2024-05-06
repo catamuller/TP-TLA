@@ -54,14 +54,14 @@ void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	}
 }
 
-Note NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->note = lexicalAnalyzerContext->lexeme;
 	return NOTE;
 }
 
-Class ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	Token token;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Integer") == 0)
@@ -86,21 +86,21 @@ Token EqualLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return EQUAL;
 }
 
-Chord ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->chord = lexicalAnalyzerContext->lexeme;
 	return CHORD;
 }
 
-Rest RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->rest = lexicalAnalyzerContext->lexeme;
 	return REST;
 }
 
-Clef ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->clef = lexicalAnalyzerContext->lexeme;
@@ -108,7 +108,7 @@ Clef ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 }
 
 
-Instrument InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 
 	lexicalAnalyzerContext->semanticValue->instrument = lexicalAnalyzerContext->lexeme;

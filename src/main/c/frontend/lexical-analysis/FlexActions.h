@@ -25,12 +25,12 @@ void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerC
 void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Note NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Chord ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Rest RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Instrument InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token NoteLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token InstrumentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Class ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token EqualLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
@@ -46,7 +46,7 @@ Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token RepetitionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
-Clef ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token ClefValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token PipeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
