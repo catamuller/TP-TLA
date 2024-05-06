@@ -67,7 +67,9 @@ Program * AssignmentProgramSemanticAction(CompilerState * compilerState, assignm
 //aca empieza nuestro codigo :D
 Program * ProgramSemanticAction(assignment * _assignment);
 
-assignment * AssignmentSemanticAction(type * _type, char * id, Expression * expression);
+Expression * expressionNoteExpresionSemanticAction(noteExpression * _noteExpression);
+
+assignment * AssignmentSemanticAction(type * _type, id * _id, Expression * expression);
 
 type * TypeSemanticAction(Class class);
 
@@ -81,11 +83,11 @@ chord * ChordSemanticAction(Chord _chord);
 
 instrument * InstrumentSemanticAction(Instrument _instrument);
 
-scoreExpression * ScoreExpressionSemanticAction(instrument * _instrument, sentences * _sentences);
+scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instrument * _instrument, sentences * _sentences);
 
 Expression * expressionNoteExpressionSemanticAction(noteExpression * _noteExpression);
 
-Expression * expressionScoreExpressionSemanticAction(scoreExpression * _scoreExpression);
+Expression * expressionScoreExpressionSemanticAction(score * _scoreExpression);
 
 clefSentence * clefSentenceSemanticAction(clef * _clef);
 
@@ -102,6 +104,10 @@ tab * tabNoteTabSemanticAction(note * _note, tab * _tab);
 tab * tabChordTabSemanticAction(chord * _chord, tab * _tab);
 
 tab * tabRestTabSemanticAction(rest * _rest, tab * _tab);
+
+sentence * sentenceClefSentenceSemanticAction(clefSentence * _clefSentence);
+
+sentence * sentenceTabsSentenceSemanticAction(tabsSentence * _tabsSentence);
 
 sentences * sentencesSentenceSentencesSemanticAction(sentence * param_sentence,sentences * param_sentences, SentencesType type);
 

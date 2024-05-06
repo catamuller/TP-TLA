@@ -75,6 +75,10 @@ typedef struct clef clef;
 typedef struct tabs tabs;
 typedef struct tab tab;
 typedef struct rest rest;
+typedef struct declaration declaration;
+typedef struct tempo tempo;
+typedef struct signature signature;
+typedef struct score score;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -171,6 +175,7 @@ struct sentences {
 };
 
 struct scoreExpression {
+	declaration * _declaration;
 	instrument * instrument;
 	sentences * _sentences;
 };
@@ -178,8 +183,26 @@ struct scoreExpression {
 
 struct assignment {
 	type * class;
-	IDM id;
+	id * _id;
 	Expression * expression;
+};
+
+struct score {
+	id * _id;
+	scoreExpression * scoreExpression;
+};
+
+struct declaration {
+	tempo * _tempo;
+	signature * _signature;
+};
+
+struct tempo {
+	Integer tempo;
+};
+
+struct signature {
+	Signature signature;
 };
 
 
@@ -208,7 +231,7 @@ struct Factor {
 struct Expression {
 	union {
 		noteExpression * noteExpression;
-		scoreExpression * scoreExpression;
+		score * _score;
 	};
 	ExpressionType type;
 };
@@ -229,6 +252,8 @@ struct Program {
 void releaseProgram(Program * program);
 void releaseAssignment(assignment * assignment);
 void releaseExpression(Expression * expression);
+void releaseScore(score * _score);
+void releaseId(id * _id);
 // void releaseType(Type * type);
 void releaseNoteExpression(noteExpression * noteExpression); // check
 void releaseScoreExpression(scoreExpression * scoreExpression); // check

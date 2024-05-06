@@ -93,6 +93,13 @@ Token ChordLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return CHORD;
 }
 
+Token SignatureValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+
+	lexicalAnalyzerContext->semanticValue->signature = lexicalAnalyzerContext->lexeme;
+	return SIGNATURE;
+}
+
 Token RestLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 

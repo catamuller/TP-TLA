@@ -82,6 +82,26 @@ void releaseProgram(Program * _program){
 	}
 }
 
+void releaseId(id * _id) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_id != NULL) {
+		if (_id->id != NULL) {
+			free(_id->id);
+		}
+		free(_id);
+	}
+}
+
+void releaseScore(score * _score) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_score != NULL) {
+		if (_score->scoreExpression != NULL) {
+			releaseScoreExpression(_score->scoreExpression);
+		}
+		free(_score);
+	}
+}
+
 void releaseExpression(Expression * expression) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (expression != NULL) {
@@ -90,7 +110,7 @@ void releaseExpression(Expression * expression) {
 				releaseNoteExpression(expression->noteExpression);
 				break;
 			case SCOREEXPRESSION:
-				releaseScoreExpression(expression->scoreExpression);
+				releaseScore(expression->_score);
 				break;
 		}
 		free(expression);

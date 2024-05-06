@@ -16,5 +16,6 @@ typedef char* Chord;
 typedef char* Rest;
 typedef char* Tab;
 typedef char* Instrument;
+typedef char* Signature;
 
 #endif

@@ -100,10 +100,10 @@ Program * ProgramSemanticAction(assignment * _assignment) {
 	return program;
 }
 
-assignment * AssignmentSemanticAction(type * _type, char * id, Expression * expression) {
+assignment * AssignmentSemanticAction(type * _type, id * id, Expression * expression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	assignment * toReturn = calloc(1, sizeof(assignment));
-	toReturn->id = id;
+	toReturn->_id = id;
 	toReturn->expression = expression;
 	toReturn->class = _type;
 	return toReturn;
@@ -153,9 +153,10 @@ instrument * InstrumentSemanticAction(Instrument _instrument) {
 	return toReturn;
 }
 
-scoreExpression * ScoreExpressionSemanticAction(instrument * _instrument, sentences * _sentences) {
+scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instrument * _instrument, sentences * _sentences) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	scoreExpression * score_expression = calloc(1, sizeof(scoreExpression));
+	score_expression->_declaration = _declaration;
 	score_expression->instrument = _instrument;
 	score_expression->_sentences = _sentences;
 	return score_expression;
@@ -168,10 +169,17 @@ clefSentence * clefSentenceSemanticAction(clef * _clef) {
 	return toReturn;
 }
 
-Expression * expressionScoreExpressionSemanticAction(scoreExpression * _scoreExpression) {
+Expression * expressionNoteExpresionSemanticAction(noteExpression * _noteExpression) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Expression * toReturn = calloc(1, sizeof(Expression));
-	toReturn->scoreExpression = _scoreExpression;
+	toReturn->noteExpression = _noteExpression;
+	return toReturn;
+}
+
+Expression * expressionScoreExpressionSemanticAction(score * _scoreExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * toReturn = calloc(1, sizeof(Expression));
+	toReturn->_score = _scoreExpression;
 	return toReturn;
 }
 
@@ -193,6 +201,20 @@ tabsSentence * tabsSentenceSemanticAction(tabs * _tabs){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	tabs * toReturn = calloc(1, sizeof(tabs));
 	toReturn->_tabs = _tabs;
+	return toReturn;
+}
+
+sentence * sentenceTabsSentenceSemanticAction(tabsSentence * _tabsSentence) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	sentence * toReturn = calloc(1, sizeof(sentence));
+	toReturn->_tabsSentence = _tabsSentence;
+	return toReturn;
+}
+
+sentence * sentenceClefSentenceSemanticAction(clefSentence * _clefSentence) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	sentence * toReturn = calloc(1, sizeof(sentence));
+	toReturn->_clefSentence = _clefSentence;
 	return toReturn;
 }
 

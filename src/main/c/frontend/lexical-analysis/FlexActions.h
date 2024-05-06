@@ -42,6 +42,8 @@ Token DotLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 Token SemicolonLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
+Token SignatureValueLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+
 Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token RepetitionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

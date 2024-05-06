@@ -19,6 +19,7 @@
 	Integer integer;
 	Instrument instrument;
 	Token token;
+	Signature signature;
 
 	/** Non-terminals. */
 	assignment * assignment;
@@ -37,6 +38,10 @@
 	tab * tabType;
 	rest * restType;
 	id * idType;
+	declaration * declarationType;
+	tempo * tempoType;
+	signature * signatureType;
+	score * scoreType;
 
 	Expression * expression;
 	Program * program;
@@ -69,12 +74,15 @@
 %token <instrument> INSTRUMENT
 %token <clef> CLEFVALUE
 %token <token> PIPE
+%token <signature> SIGNATUREVALUE
 
 %token <token> SCORE
 %token <token> TEMPO
 %token <token> SIGNATURE
 %token <token> CLEF
 %token <token> TABS
+
+%token <integer> TEMPOVALUE
 
 %token <integer> INTEGER
 %token <classType> INTEGERCLASS
@@ -116,6 +124,10 @@
 %type <tabType> tab
 %type <restType> rest
 %type <idType> id
+%type <declarationType> declaration
+%type <tempoType> tempo
+%type <signatureType> signature
+%type <scoreType> score
 
 %type <expression> expression
 %type <program> program
@@ -148,13 +160,13 @@ type: NOTECLASS | CHORDCLASS | TABCLASS | RESTCLASS | INTEGERCLASS	{ $$ = TypeSe
 
 
 expression: noteExpression 											{ $$ = expressionNoteExpresionSemanticAction($1); }
-	| scoreExpression												{ $$ = expressionScoreExpressionSemanticAction($1); }
+	| score												{ $$ = expressionScoreExpressionSemanticAction($1); }
 	;
 
 /*
 *Asumo que Noteclass va implicito con noteExpression, commo el = con Assignment
 */
-noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
+noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS SEMICOLON		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
 	;
 
 note: NOTE															{ $$ = NoteSemanticAction($1); }
@@ -166,7 +178,19 @@ chord: CHORD														{ $$ = ChordSemanticAction($1); }
 instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction($1); }
 	;
 
-scoreExpression: instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = ScoreExpressionSemanticAction($1, $3); }
+score: SCORE id OPEN_BRACES scoreExpression CLOSE_BRACES
+	;
+
+scoreExpression: declaration instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = ScoreExpressionSemanticAction($1, $2, $3); }
+	;
+
+declaration: tempo signature
+	;
+
+tempo: TEMPO TEMPOVALUE SEMICOLON
+	;
+
+signature: SIGNATURE SIGNATUREVALUE SEMICOLON
 	;
 
 sentences: sentence sentences							{ $$ = sentencesSentenceSentencesSemanticAction($1, $2, SENTENCES); }

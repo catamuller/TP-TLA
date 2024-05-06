@@ -44,6 +44,7 @@
 
 "|"                 { return PipeLexemeAction(createLexicalAnalyzerContext()); }
 
+[:digit:]"/"[:digit:] { return SignatureValueLexemeAction(createLexicalAnalyzerContext()); } 
 
 ("piano"|"marimba")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
 
