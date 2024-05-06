@@ -1,4 +1,4 @@
 /*
 	A multiline comment.
 */
-0
+Note note = Note(c,7,piano);

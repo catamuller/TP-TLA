@@ -73,7 +73,7 @@
 
 [[:digit:]]+				{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
-[[:alnum]]+         { return IDLexemeAction(createLexicalAnalyzerContext()); }
+[[:alnum:]]+         { return IDLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }

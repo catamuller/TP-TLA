@@ -79,6 +79,7 @@ typedef struct declaration declaration;
 typedef struct tempo tempo;
 typedef struct signature signature;
 typedef struct score score;
+typedef struct pitch pitch;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -205,12 +206,16 @@ struct signature {
 	Signature signature;
 };
 
+struct pitch {
+	Integer _pitch;
+};
+
 
 
 //Cm(C, 2, marimba)
 struct noteExpression {
 	note * _note;
-	int pitch;
+	pitch * _pitch;
 	instrument * _instrument;
 };
 

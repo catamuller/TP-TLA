@@ -42,6 +42,7 @@
 	tempo * tempoType;
 	signature * signatureType;
 	score * scoreType;
+	pitch * pitchType;
 
 	Expression * expression;
 	Program * program;
@@ -128,6 +129,7 @@
 %type <tempoType> tempo
 %type <signatureType> signature
 %type <scoreType> score
+%type <pitchType> pitch
 
 %type <expression> expression
 %type <program> program
@@ -166,7 +168,10 @@ expression: noteExpression 											{ $$ = expressionNoteExpresionSemanticActi
 /*
 *Asumo que Noteclass va implicito con noteExpression, commo el = con Assignment
 */
-noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA INTEGER COMMA instrument CLOSE_PARENTHESIS SEMICOLON		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
+noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA pitch COMMA instrument CLOSE_PARENTHESIS SEMICOLON		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
+	;
+
+pitch: INTEGER													{ $$ = PitchSemanticAction($1); }
 	;
 
 note: NOTE															{ $$ = NoteSemanticAction($1); }

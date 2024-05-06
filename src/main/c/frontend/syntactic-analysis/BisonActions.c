@@ -116,11 +116,11 @@ type * TypeSemanticAction(Class class) {
 	return _type;
 }
 
-noteExpression * noteExpressionSemanticAction(note * _note, int pitch, instrument * instrument) {
+noteExpression * noteExpressionSemanticAction(note * _note, pitch * _pitch, instrument * instrument) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	noteExpression * note_expression = calloc(1, sizeof(noteExpression));
 	note_expression->_note = _note;
-	note_expression->pitch = pitch;
+	note_expression->_pitch = _pitch;
 	note_expression->_instrument = instrument;
 	return note_expression;
 }
@@ -129,6 +129,13 @@ note * NoteSemanticAction(Note _note) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	note * toReturn = calloc(1, sizeof(note));
 	toReturn->note = _note;
+	return toReturn;
+}
+
+pitch * PitchSemanticAction(Integer _pitch) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	pitch * toReturn = calloc(1, sizeof(pitch));
+	toReturn->_pitch = _pitch;
 	return toReturn;
 }
 

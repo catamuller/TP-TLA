@@ -69,11 +69,13 @@ Program * ProgramSemanticAction(assignment * _assignment);
 
 Expression * expressionNoteExpresionSemanticAction(noteExpression * _noteExpression);
 
+pitch * PitchSemanticAction(Integer _pitch);
+
 assignment * AssignmentSemanticAction(type * _type, id * _id, Expression * expression);
 
 type * TypeSemanticAction(Class class);
 
-noteExpression * noteExpressionSemanticAction(note * _note, int pitch, instrument * instrument);
+noteExpression * noteExpressionSemanticAction(note * _note, pitch * pitch, instrument * instrument);
 
 note * NoteSemanticAction(Note _note);
 
