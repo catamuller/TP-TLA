@@ -48,35 +48,35 @@
 
 ("piano"|"marimba"|"guitar"|"trumpet"|"trombone")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
 
-"score"             { return ScoreLexemeAction(createLexicalAnalyzerContext()); }
-"tempo"             { return TempoLexemeAction(createLexicalAnalyzerContext()); }
-"signature"         { return SignatureLexemeAction(createLexicalAnalyzerContext()); }
-"clef"              { return ClefLexemeAction(createLexicalAnalyzerContext()); }
-"tabs"              { return TabsLexemeAction(createLexicalAnalyzerContext()); }
-"."                 { return DotLexemeAction(createLexicalAnalyzerContext()); }
-"after"             { return ConditionalLexemeAction(createLexicalAnalyzerContext()); }
-"before"            { return ConditionalLexemeAction(createLexicalAnalyzerContext()); }
-"along"             { return ConditionalLexemeAction(createLexicalAnalyzerContext()); }
-"repeat"            { return RepetitionLexemeAction(createLexicalAnalyzerContext()); }
-"transpose"         { return TranspositionLexemeAction(createLexicalAnalyzerContext()); }
-";"                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
+"score"                             { return ScoreLexemeAction(createLexicalAnalyzerContext()); }
+"tempo"                             { return TempoLexemeAction(createLexicalAnalyzerContext()); }
+"signature"                         { return SignatureLexemeAction(createLexicalAnalyzerContext()); }
+"clef"                              { return ClefLexemeAction(createLexicalAnalyzerContext()); }
+"tabs"                              { return TabsLexemeAction(createLexicalAnalyzerContext()); }
+"."                                 { return DotLexemeAction(createLexicalAnalyzerContext()); }
+"after"                             { return ConditionalLexemeAction(createLexicalAnalyzerContext()); }
+"before"                            { return ConditionalLexemeAction(createLexicalAnalyzerContext()); }
+"along"                             { return ConditionalLexemeAction(createLexicalAnalyzerContext()); }
+"repeat("[[:digit:]]+")"            { return RepetitionLexemeAction(createLexicalAnalyzerContext()); }
+"transpose("("-")?[[:digit:]]+")"   { return TranspositionLexemeAction(createLexicalAnalyzerContext()); }
+";"                                 { return SemicolonLexemeAction(createLexicalAnalyzerContext()); }
+                                            
+"="                                 { return EqualLexemeAction(createLexicalAnalyzerContext()); }
+                
+","                                 { return CommaLexemeAction(createLexicalAnalyzerContext()); }
+                
+"{"                                 { return BracesLexemeAction(createLexicalAnalyzerContext()); }
+"}"                                 { return BracesLexemeAction(createLexicalAnalyzerContext()); }
+                
+"("									                { return ParenthesisLexemeAction(createLexicalAnalyzerContext()); }
+")"									                { return ParenthesisLexemeAction(createLexicalAnalyzerContext()); }
+                
+[[:digit:]]+				                { return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
-"="                 { return EqualLexemeAction(createLexicalAnalyzerContext()); }
+[[:alnum:]]+                        { return IDLexemeAction(createLexicalAnalyzerContext()); }
 
-","                 { return CommaLexemeAction(createLexicalAnalyzerContext()); }
-
-"{"                 { return BracesLexemeAction(createLexicalAnalyzerContext()); }
-"}"                 { return BracesLexemeAction(createLexicalAnalyzerContext()); }
-
-"("									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext()); }
-")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext()); }
-
-[[:digit:]]+				{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
-
-[[:alnum:]]+         { return IDLexemeAction(createLexicalAnalyzerContext()); }
-
-[[:space:]]+				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-.									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
+[[:space:]]+			                	{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+.									                  { return UnknownLexemeAction(createLexicalAnalyzerContext()); }
 
 %%
 

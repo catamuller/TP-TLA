@@ -210,13 +210,15 @@ Token ConditionalLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 
 Token RepetitionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = REPEAT;
+	lexicalAnalyzerContext->lexeme[length(lexicalAnalyzerContext->lexeme)] = '\0';
+	lexicalAnalyzerContext->semanticValue->integer = atoi(lexicalAnalyzerContext->lexeme+7*sizeof(char));
 	return REPEAT;
 }
 
 Token TranspositionLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = TRANSPOSE;
+	lexicalAnalyzerContext->lexeme[length(lexicalAnalyzerContext->lexeme)] = '\0';
+	lexicalAnalyzerContext->semanticValue->integer = atoi(lexicalAnalyzerContext->lexeme+10*sizeof(char));;
 	return TRANSPOSE;
 }
 

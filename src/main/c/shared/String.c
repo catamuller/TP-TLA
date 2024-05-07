@@ -101,3 +101,9 @@ char * indentation(const char character, const unsigned int level, const unsigne
 	}
 	return indentation;
 }
+
+int length(const char * string) {
+	int i = 0;
+	while (string[i++]);
+	return i-1;
+}

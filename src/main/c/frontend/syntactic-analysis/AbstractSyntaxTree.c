@@ -104,11 +104,19 @@ void releaseId(id * _id) {
 	}
 }
 
+void releaseTransposition(transpose * _transposition) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_transposition != NULL) {
+		free(_transposition);
+	}
+}
+
 void releaseScore(score * _score) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_score != NULL) {
 		releaseId(_score->_id);
 		releaseScoreExpressions(_score->scoreExpressions);
+		releaseTransposition(_score->_transpose);
 		free(_score);
 	}
 }
@@ -205,11 +213,20 @@ void releaseNoteExpression(noteExpression * noteExpression){
 	}
 }
 
+void releaseClefDeclaration(clefDeclaration * _clefDeclaration) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_clefDeclaration!=NULL) {
+		releaseClefSentence(_clefDeclaration->_clefSentence);
+		releaseSentences(_clefDeclaration->_sentences);
+		free(_clefDeclaration);
+	}
+}
+
 void releaseInstruments(instruments * _instruments) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_instruments != NULL) {
 		releaseInstrument(_instruments->_instrument);
-		releaseSentences(_instruments->_sentences);
+		releaseClefDeclaration(_instruments->_clefDeclaration);
 		releaseInstruments(_instruments->_instruments);
 
 		free(_instruments);
@@ -298,11 +315,30 @@ void releaseClefSentence(clefSentence * clefSentence){
 		free(clefSentence);
 	}
 }
+
+void releaseRepeat(repeat * _repeat) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_repeat != NULL) {
+		free(_repeat);
+	}
+}
+
+void releaseControl(control * _control) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_control != NULL) {
+		releaseRepeat(_control->_repeat);
+		releaseControl(_control->_control);
+
+		free(_control);
+	}
+}
+
 void releaseTabsSentence(tabsSentence * tabsSentence){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (tabsSentence != NULL) {
 		releaseId(tabsSentence->_id);
 		releaseTabs(tabsSentence->_tabs);
+		releaseControl(tabsSentence->_control);
 	
 		free(tabsSentence);
 	}

@@ -51,6 +51,10 @@
 	tabValues * tabValuesType;
 	scoreExpressions * scoreExpressionsType;
 	instruments * instrumentsType;
+	repeat * repeatType;
+	transpose * transposeType;
+	control * controlType;
+	clefDeclaration * clefDeclarationType;
 
 	Expression * expression;
 	Program * program;
@@ -146,6 +150,10 @@
 %type <tabValuesType> tabValues
 %type <scoreExpressionsType> scoreExpressions
 %type <instrumentsType> instruments
+%type <repeatType> repeat
+%type <transposeType> transpose
+%type <controlType> control
+%type <clefDeclarationType> clefDeclaration
 
 %type <expression> expression
 %type <program> program
@@ -224,17 +232,17 @@ chord: CHORD														{ $$ = ChordSemanticAction($1); }
 instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction($1); }
 	;
 
-score: SCORE id OPEN_BRACES scoreExpressions CLOSE_BRACES		{ $$ = scoreSemanticAction($2, $4); }
+score: SCORE id OPEN_BRACES scoreExpressions CLOSE_BRACES transpose		{ $$ = scoreSemanticAction($2, $4, $6); }
 	;
-
-scoreExpressions: OPEN_BRACES scoreExpression CLOSE_BRACES scoreExpressions		{ $$ = scoreExpressionsScoreExpressionsScoreExpressionSemanticAction($2, $4); }
-	| OPEN_BRACES scoreExpression CLOSE_BRACES																	{ $$ = scoreExpressionsScoreExpressionSemanticAction($2); }
+	
+scoreExpressions: OPEN_BRACES scoreExpression CLOSE_BRACES scoreExpressions	{ $$ = scoreExpressionsScoreExpressionsScoreExpressionSemanticAction($2, $4); }
+	| OPEN_BRACES scoreExpression CLOSE_BRACES															{ $$ = scoreExpressionsScoreExpressionSemanticAction($2); }
 
 scoreExpression: declaration instruments		{ $$ = ScoreExpressionSemanticAction($1, $2); }
 	;
 
-instruments: instrument OPEN_BRACES sentences CLOSE_BRACES instruments						{ $$ = instrumentsInstrumentInstrumentsSemanticAction($1, $3, $5); }
-	| instrument OPEN_BRACES sentences CLOSE_BRACES																	{ $$ = instrumentsInstrumentInstrumentsSemanticAction($1, $3, NULL); }
+instruments: instrument OPEN_BRACES clefDeclaration CLOSE_BRACES instruments						{ $$ = instrumentsInstrumentInstrumentsSemanticAction($1, $3, $5); }
+	| instrument OPEN_BRACES clefDeclaration CLOSE_BRACES																	{ $$ = instrumentsInstrumentInstrumentsSemanticAction($1, $3, NULL); }
 
 declaration: tempo signature				{ $$ = DeclarationSemanticAction($1, $2); }
 	;
@@ -243,6 +251,9 @@ tempo: TEMPO INTEGER SEMICOLON			{ $$ = tempoSemanticAction($2); }
 	;
 
 signature: SIGNATURE SIGNATUREVALUE SEMICOLON		{ $$ = signatureSemanticAction($2); }
+	;
+
+clefDeclaration: clefSentence sentences					{ $$ = clefDeclarationSemanticAction($1, $2); }
 	;
 
 sentences: sentence sentences							{ $$ = sentencesSentenceSentencesSemanticAction($1, $2, SENTENCES); }
@@ -259,8 +270,19 @@ clefSentence: CLEF clef SEMICOLON						{ $$ = clefSentenceSemanticAction($2); }
 clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 	;
 
-tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES		{ $$ = tabsSentenceSemanticAction($2, $4); }
-	| TABS OPEN_BRACES tabs CLOSE_BRACES								{ $$ = tabsSentenceSemanticAction(NULL, $3); }
+tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES	control	{ $$ = tabsSentenceSemanticAction($2, $4, $6); }
+	| TABS OPEN_BRACES tabs CLOSE_BRACES control								{ $$ = tabsSentenceSemanticAction(NULL, $3, $5); }
+	;
+
+control: DOT repeat control				{ $$ = controlSemanticAction($2, $3); }
+	| %empty												{ $$ = controlSemanticAction(NULL, NULL); }
+	;
+
+repeat: REPEAT										{ $$ = repeatSemanticAction($1); }
+	;
+
+transpose: DOT TRANSPOSE		{ $$ = transposeSemanticAction($2); }
+	| %empty					{ $$ = transposeSemanticAction(0); }
 	;
 
 tabs: tab PIPE tabs 			{ $$ = tabsPipeSemanticAction($1, $3); }

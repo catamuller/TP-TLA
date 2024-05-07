@@ -124,6 +124,10 @@ typedef struct tabExpression tabExpression;
 typedef struct tabValues tabValues;
 typedef struct scoreExpressions scoreExpressions;
 typedef struct instruments instruments;
+typedef struct control control;
+typedef struct repeat repeat;
+typedef struct transpose transpose;
+typedef struct clefDeclaration clefDeclaration;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -151,12 +155,25 @@ struct clef {
 
 struct instruments {
 	instrument * _instrument;
-	sentences * _sentences;
+	clefDeclaration * _clefDeclaration;
 	instruments * _instruments;
 };
 
 struct instrument {
 	Instrument instrument;
+};
+
+struct control {
+	control * _control;
+	repeat * _repeat;
+};
+
+struct repeat {
+	Integer _repeat;
+};
+
+struct transpose {
+	Integer _transpose;
 };
 
 struct clefSentence {
@@ -191,6 +208,7 @@ struct id {
 struct tabsSentence {
 	id * _id;
 	tabs * _tabs;
+	control * _control;
 
 	tabsSentenceType type;
 };
@@ -218,6 +236,7 @@ struct scoreExpressions {
 	scoreExpression * _scoreExpression;
 	scoreExpressions * _scoreExpressions;
 
+
 	ScoreExpressionsType type;
 };
 
@@ -236,6 +255,12 @@ struct assignment {
 struct score {
 	id * _id;
 	scoreExpressions * scoreExpressions;
+	transpose * _transpose;;
+};
+
+struct clefDeclaration {
+	clefSentence * _clefSentence;
+	sentences * _sentences;
 };
 
 struct declaration {
@@ -376,4 +401,7 @@ void releaseSignature(signature * _signature);
 void releaseTabValues(tabValues * _tabValues);
 void releaseTabExpression(tabExpression * _tabExpression);
 void releaseScoreExpressions(scoreExpressions * _scoreExpressions);
+void releaseControl(control * _control);
+void releaseRepeat(repeat * _repeat);
+void releaseTransposition(transpose * _transposition);
 #endif

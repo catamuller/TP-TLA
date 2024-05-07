@@ -100,7 +100,9 @@ scoreExpressions * scoreExpressionsScoreExpressionsScoreExpressionSemanticAction
 
 scoreExpressions * scoreExpressionsScoreExpressionSemanticAction(scoreExpression * _scoreExpression);
 
-score * scoreSemanticAction(id * _id, scoreExpressions * _scoreExpressions);
+score * scoreSemanticAction(id * _id, scoreExpressions * _scoreExpressions, transpose * _transposition);
+
+transpose * transposeSemanticAction(int transposition);
 
 tempo * tempoSemanticAction(Integer _tempo);
 
@@ -134,13 +136,19 @@ Expression * expressionTabExpression(tabExpression * _tabExpression);
 
 Expression * expressionScoreExpressionSemanticAction(score * _scoreExpression);
 
-instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instrument, sentences * _sentences, instruments * _instruments);
+instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instrument, clefDeclaration * _clefDeclaration, instruments * _instruments);
+
+clefDeclaration * clefDeclarationSemanticAction(clefSentence * _clefSentence, sentences * _sentences);
 
 clefSentence * clefSentenceSemanticAction(clef * _clef);
 
+control * controlSemanticAction(repeat * _repeat, control * _control);
+
+repeat * repeatSemanticAction(Integer _repeat);
+
 clef * clefSemanticAction(Clef _clef);
 
-tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs);
+tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, control * _control);
 
 tabs * tabsPipeSemanticAction(tab * _tab, tabs * _tabs);
 

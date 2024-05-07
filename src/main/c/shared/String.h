@@ -35,4 +35,6 @@ char * escape(const char * string);
  */
 char * indentation(const char character, const unsigned int level, const unsigned int size);
 
+int length(const char * string);
+
 #endif

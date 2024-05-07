@@ -202,11 +202,12 @@ declaration * DeclarationSemanticAction(tempo * _tempo, signature * _signature) 
 	return declaration;
 }
 
-score * scoreSemanticAction(id * _id, scoreExpressions * _scoreExpressions) {
+score * scoreSemanticAction(id * _id, scoreExpressions * _scoreExpressions, transpose * _transposition) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	score * _score = calloc(1, sizeof(score));
 	_score->_id = _id;
 	_score->scoreExpressions = _scoreExpressions;
+	_score->_transpose = _transposition;
 	return _score;
 }
 
@@ -284,12 +285,21 @@ scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, inst
 	return score_expression;
 }
 
-instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instrument, sentences * _sentences, instruments * _instruments) {
+instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instrument, clefDeclaration * _clefDeclaration, instruments * _instruments) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	instruments * toReturn = calloc(1, sizeof(instruments));
 	toReturn->_instrument = _instrument;
-	toReturn->_sentences = _sentences;
+	toReturn->_clefDeclaration = _clefDeclaration;
 	toReturn->_instruments = _instruments;
+	return toReturn;
+}
+
+clefDeclaration * clefDeclarationSemanticAction(clefSentence * _clefSentence, sentences * _sentences) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	clefDeclaration * toReturn = calloc(1, sizeof(clefDeclaration));
+	toReturn->_clefSentence = _clefSentence;
+	toReturn->_sentences = _sentences;
+
 	return toReturn;
 }
 
@@ -361,7 +371,7 @@ clef * clefSemanticAction(Clef _clef) {
 	return toReturn;
 }
 
-tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs){
+tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, control * _control){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	tabsSentence * toReturn = calloc(1, sizeof(tabsSentence));
 	if (_id != NULL) {
@@ -371,6 +381,24 @@ tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs){
 	}
 	toReturn->_id = _id;
 	toReturn->_tabs = _tabs;
+	toReturn->_control = _control;
+	return toReturn;
+}
+
+control * controlSemanticAction(repeat * _repeat, control * _control) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	control * toReturn = calloc(1, sizeof(control));
+	toReturn->_control = _control;
+	toReturn->_repeat = _repeat;
+
+	return toReturn;
+}
+
+repeat * repeatSemanticAction(Integer _repeat) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	repeat * toReturn = calloc(1, sizeof(repeat));
+	toReturn->_repeat = _repeat;
+
 	return toReturn;
 }
 
@@ -388,6 +416,14 @@ sentence * sentenceClefSentenceSemanticAction(clefSentence * _clefSentence) {
 	sentence * toReturn = calloc(1, sizeof(sentence));
 	toReturn->_clefSentence = _clefSentence;
 	toReturn->sentenceType = CLEFSENTENCE;
+	return toReturn;
+}
+
+transpose * transposeSemanticAction(int transposition) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	transpose * toReturn = calloc(1, sizeof(transpose));
+	toReturn->_transpose = transposition;
+
 	return toReturn;
 }
 
