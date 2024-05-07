@@ -1,0 +1,10 @@
+Note myNote = Note(c,7,piano);
+score myScore {
+  {
+  tempo 200;
+  signature 2/4;
+  piano {
+    a b c d
+  }
+  }
+}
