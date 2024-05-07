@@ -49,6 +49,8 @@
 	chordValues * chordValuesType;
 	tabExpression * tabExpressionType;
 	tabValues * tabValuesType;
+	scoreExpressions * scoreExpressionsType;
+	instruments * instrumentsType;
 
 	Expression * expression;
 	Program * program;
@@ -142,6 +144,8 @@
 %type <chordValuesType> chordValues
 %type <tabExpressionType> tabExpression
 %type <tabValuesType> tabValues
+%type <scoreExpressionsType> scoreExpressions
+%type <instrumentsType> instruments
 
 %type <expression> expression
 %type <program> program
@@ -220,11 +224,17 @@ chord: CHORD														{ $$ = ChordSemanticAction($1); }
 instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction($1); }
 	;
 
-score: SCORE id OPEN_BRACES scoreExpression CLOSE_BRACES		{ $$ = scoreSemanticAction($2, $4); }
+score: SCORE id OPEN_BRACES scoreExpressions CLOSE_BRACES		{ $$ = scoreSemanticAction($2, $4); }
 	;
 
-scoreExpression: declaration instrument OPEN_BRACES sentences CLOSE_BRACES		{ $$ = ScoreExpressionSemanticAction($1, $2, $4); }
+scoreExpressions: OPEN_BRACES scoreExpression CLOSE_BRACES scoreExpressions		{ $$ = scoreExpressionsScoreExpressionsScoreExpressionSemanticAction($2, $4); }
+	| OPEN_BRACES scoreExpression CLOSE_BRACES																	{ $$ = scoreExpressionsScoreExpressionSemanticAction($2); }
+
+scoreExpression: declaration instruments		{ $$ = ScoreExpressionSemanticAction($1, $2); }
 	;
+
+instruments: instrument OPEN_BRACES sentences CLOSE_BRACES instruments						{ $$ = instrumentsInstrumentInstrumentsSemanticAction($1, $3, $5); }
+	| instrument OPEN_BRACES sentences CLOSE_BRACES																	{ $$ = instrumentsInstrumentInstrumentsSemanticAction($1, $3, NULL); }
 
 declaration: tempo signature				{ $$ = DeclarationSemanticAction($1, $2); }
 	;
@@ -249,7 +259,8 @@ clefSentence: CLEF clef SEMICOLON						{ $$ = clefSentenceSemanticAction($2); }
 clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 	;
 
-tabsSentence: TABS OPEN_BRACES tabs CLOSE_BRACES		{ $$ = tabsSentenceSemanticAction($3); }
+tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES		{ $$ = tabsSentenceSemanticAction($2, $4); }
+	| TABS OPEN_BRACES tabs CLOSE_BRACES								{ $$ = tabsSentenceSemanticAction(NULL, $3); }
 	;
 
 tabs: tab PIPE tabs 			{ $$ = tabsPipeSemanticAction($1, $3); }

@@ -107,10 +107,25 @@ void releaseId(id * _id) {
 void releaseScore(score * _score) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_score != NULL) {
-		if (_score->scoreExpression != NULL) {
-			releaseScoreExpression(_score->scoreExpression);
-		}
+		releaseId(_score->_id);
+		releaseScoreExpressions(_score->scoreExpressions);
 		free(_score);
+	}
+}
+
+void releaseScoreExpressions(scoreExpressions * _scoreExpressions) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_scoreExpressions != NULL) {
+		switch (_scoreExpressions->type) {
+			case SCOREEXPRESSIONSTYPE:
+				releaseScoreExpression(_scoreExpressions->_scoreExpression);
+				releaseScoreExpressions(_scoreExpressions->_scoreExpressions);
+				break;
+			case SCOREEXPRESSIONTYPE:
+				releaseScoreExpression(_scoreExpressions->_scoreExpression);
+				break;
+		}
+		free(_scoreExpressions);
 	}
 }
 
@@ -190,17 +205,25 @@ void releaseNoteExpression(noteExpression * noteExpression){
 	}
 }
 
+void releaseInstruments(instruments * _instruments) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_instruments != NULL) {
+		releaseInstrument(_instruments->_instrument);
+		releaseSentences(_instruments->_sentences);
+		releaseInstruments(_instruments->_instruments);
+
+		free(_instruments);
+	}
+}
+
 void releaseScoreExpression(scoreExpression * scoreExpression){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (scoreExpression != NULL) {
-		if (scoreExpression->instrument != NULL) {
-			releaseInstrument(scoreExpression->instrument);
+		if (scoreExpression->instruments != NULL) {
+			releaseInstruments(scoreExpression->instruments);
 		}
 		if(scoreExpression->_declaration != NULL){
 			releaseDeclaration(scoreExpression->_declaration);
-		}
-		if(scoreExpression->_sentences != NULL){
-			releaseSentences(scoreExpression->_sentences);
 		}
 		free(scoreExpression);
 	}
@@ -278,9 +301,9 @@ void releaseClefSentence(clefSentence * clefSentence){
 void releaseTabsSentence(tabsSentence * tabsSentence){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (tabsSentence != NULL) {
-		if (tabsSentence->_tabs!= NULL) {
-			releaseTabs(tabsSentence->_tabs);
-		}
+		releaseId(tabsSentence->_id);
+		releaseTabs(tabsSentence->_tabs);
+	
 		free(tabsSentence);
 	}
 

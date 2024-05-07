@@ -26,6 +26,11 @@ enum ExpressionType {
 // 	EXPRESSION
 // };
 
+enum ScoreExpressionsType {
+	SCOREEXPRESSIONSTYPE,
+	SCOREEXPRESSIONTYPE
+};
+
 enum ExpressionsType {
 	EXPRESSIONSTYPE,
 	PROGRAMEXPRESSIONTYPE
@@ -66,6 +71,11 @@ enum ChordValuesType{
 	CHORDNOTE
 };
 
+enum tabsSentenceType {
+	TABSSENTENCEWITHID,
+	TABSSENTENCENOID
+};
+
 typedef enum tabValuesType tabValuesType;
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
@@ -76,6 +86,8 @@ typedef enum TabType TabType;
 typedef enum ProgramType ProgramType;
 typedef enum ExpressionsType ExpressionsType;
 typedef enum ChordValuesType ChordValuesType;
+typedef enum ScoreExpressionsType ScoreExpressionsType;
+typedef enum tabsSentenceType tabsSentenceType;
 
 
 typedef struct Constant Constant;
@@ -110,6 +122,8 @@ typedef struct chordExpression chordExpression;
 typedef struct chordValues chordValues;
 typedef struct tabExpression tabExpression;
 typedef struct tabValues tabValues;
+typedef struct scoreExpressions scoreExpressions;
+typedef struct instruments instruments;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -133,6 +147,12 @@ struct note {
 
 struct clef {
 	Clef clef;
+};
+
+struct instruments {
+	instrument * _instrument;
+	sentences * _sentences;
+	instruments * _instruments;
 };
 
 struct instrument {
@@ -169,7 +189,10 @@ struct id {
 };
 
 struct tabsSentence {
+	id * _id;
 	tabs * _tabs;
+
+	tabsSentenceType type;
 };
 
 struct sentence {
@@ -191,10 +214,16 @@ struct sentences {
 	SentencesType sentencesType;
 };
 
+struct scoreExpressions {
+	scoreExpression * _scoreExpression;
+	scoreExpressions * _scoreExpressions;
+
+	ScoreExpressionsType type;
+};
+
 struct scoreExpression {
 	declaration * _declaration;
-	instrument * instrument;
-	sentences * _sentences;
+	instruments * instruments;
 };
 
 
@@ -206,7 +235,7 @@ struct assignment {
 
 struct score {
 	id * _id;
-	scoreExpression * scoreExpression;
+	scoreExpressions * scoreExpressions;
 };
 
 struct declaration {
@@ -346,4 +375,5 @@ void releaseTempo(tempo * _tempo);
 void releaseSignature(signature * _signature);
 void releaseTabValues(tabValues * _tabValues);
 void releaseTabExpression(tabExpression * _tabExpression);
+void releaseScoreExpressions(scoreExpressions * _scoreExpressions);
 #endif

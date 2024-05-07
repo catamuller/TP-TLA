@@ -7,7 +7,7 @@ score myScore {
             tabs {
                 c d e f | g a b c
             }
-            clef f;
+            clef clefF;
             tabs myTabs {
                 c d e f | g a b c
             }

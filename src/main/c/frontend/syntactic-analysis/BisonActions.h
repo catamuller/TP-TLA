@@ -96,7 +96,11 @@ noteExpression * noteExpressionSemanticAction(note * _note, pitch * pitch, instr
 
 declaration * DeclarationSemanticAction(tempo * _tempo, signature * _signature);
 
-score * scoreSemanticAction(id * _id, scoreExpression * _scoreExpression);
+scoreExpressions * scoreExpressionsScoreExpressionsScoreExpressionSemanticAction(scoreExpression * _scoreExpression, scoreExpressions * _scoreExpressions);
+
+scoreExpressions * scoreExpressionsScoreExpressionSemanticAction(scoreExpression * _scoreExpression);
+
+score * scoreSemanticAction(id * _id, scoreExpressions * _scoreExpressions);
 
 tempo * tempoSemanticAction(Integer _tempo);
 
@@ -110,7 +114,7 @@ chord * ChordSemanticAction(Chord _chord);
 
 instrument * InstrumentSemanticAction(Instrument _instrument);
 
-scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instrument * _instrument, sentences * _sentences);
+scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instruments * _instruments);
 
 Expression * expressionNoteExpressionSemanticAction(noteExpression * _noteExpression);
 
@@ -130,11 +134,13 @@ Expression * expressionTabExpression(tabExpression * _tabExpression);
 
 Expression * expressionScoreExpressionSemanticAction(score * _scoreExpression);
 
+instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instrument, sentences * _sentences, instruments * _instruments);
+
 clefSentence * clefSentenceSemanticAction(clef * _clef);
 
 clef * clefSemanticAction(Clef _clef);
 
-tabsSentence * tabsSentenceSemanticAction(tabs * _tabs);
+tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs);
 
 tabs * tabsPipeSemanticAction(tab * _tab, tabs * _tabs);
 

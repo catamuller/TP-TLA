@@ -202,12 +202,29 @@ declaration * DeclarationSemanticAction(tempo * _tempo, signature * _signature) 
 	return declaration;
 }
 
-score * scoreSemanticAction(id * _id, scoreExpression * _scoreExpression) {
+score * scoreSemanticAction(id * _id, scoreExpressions * _scoreExpressions) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	score * _score = calloc(1, sizeof(score));
 	_score->_id = _id;
-	_score->scoreExpression = _scoreExpression;
+	_score->scoreExpressions = _scoreExpressions;
 	return _score;
+}
+
+scoreExpressions * scoreExpressionsScoreExpressionsScoreExpressionSemanticAction(scoreExpression * _scoreExpression, scoreExpressions * _scoreExpressions) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	scoreExpressions * toReturn = calloc(1, sizeof(scoreExpressions));
+	toReturn->type = SCOREEXPRESSIONSTYPE;
+	toReturn->_scoreExpression = _scoreExpression;
+	toReturn->_scoreExpressions = _scoreExpressions;
+	return toReturn;
+}
+
+scoreExpressions * scoreExpressionsScoreExpressionSemanticAction(scoreExpression * _scoreExpression) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	scoreExpressions * toReturn = calloc(1, sizeof(scoreExpressions));
+	toReturn->type = SCOREEXPRESSIONTYPE;
+	toReturn->_scoreExpression = _scoreExpression;
+	return toReturn;
 }
 
 tempo * tempoSemanticAction(Integer _tempo) {
@@ -259,13 +276,21 @@ instrument * InstrumentSemanticAction(Instrument _instrument) {
 	return toReturn;
 }
 
-scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instrument * _instrument, sentences * _sentences) {
+scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, instruments * _instruments) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	scoreExpression * score_expression = calloc(1, sizeof(scoreExpression));
 	score_expression->_declaration = _declaration;
-	score_expression->instrument = _instrument;
-	score_expression->_sentences = _sentences;
+	score_expression->instruments = _instruments;
 	return score_expression;
+}
+
+instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instrument, sentences * _sentences, instruments * _instruments) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	instruments * toReturn = calloc(1, sizeof(instruments));
+	toReturn->_instrument = _instrument;
+	toReturn->_sentences = _sentences;
+	toReturn->_instruments = _instruments;
+	return toReturn;
 }
 
 clefSentence * clefSentenceSemanticAction(clef * _clef) {
@@ -336,9 +361,15 @@ clef * clefSemanticAction(Clef _clef) {
 	return toReturn;
 }
 
-tabsSentence * tabsSentenceSemanticAction(tabs * _tabs){
+tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	tabsSentence * toReturn = calloc(1, sizeof(tabsSentence));
+	if (_id != NULL) {
+		toReturn->type = TABSSENTENCEWITHID;
+	} else {
+		toReturn->type = TABSSENTENCENOID;
+	}
+	toReturn->_id = _id;
 	toReturn->_tabs = _tabs;
 	return toReturn;
 }

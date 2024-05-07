@@ -5,7 +5,7 @@ score myScore {
 	piano {
 		clef clefG;
 		tabs {
-		    C(w) | C(w) | C(w) | C(w)
+		    C(7, w) | C(8, w) | C(8, w) | C(10, w)
 		}
 
 	}
@@ -15,4 +15,5 @@ score myScore {
                    c4(q) d4(q) e4(q) c4(q) | c4(q) d4(q) e4(q) c4(q) | e4(q) f4(q) g4(h) | e4(q) f4(q) g4(h)
              }
 	}
+}
 }

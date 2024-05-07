@@ -46,7 +46,7 @@
 
 [[:digit:]]([[:space:]]+)?"/"([[:space:]]+)?("2"|"4"|"8"|"16"|"32"|"64"|"128") { return SignatureValueLexemeAction(createLexicalAnalyzerContext()); } 
 
-("piano"|"marimba"|"guitar"|"trumpet")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
+("piano"|"marimba"|"guitar"|"trumpet"|"trombone")           { return InstrumentLexemeAction(createLexicalAnalyzerContext()); }
 
 "score"             { return ScoreLexemeAction(createLexicalAnalyzerContext()); }
 "tempo"             { return TempoLexemeAction(createLexicalAnalyzerContext()); }
