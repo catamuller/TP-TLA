@@ -1,0 +1,28 @@
+Integer myPitch = 7;
+score myScore{
+  {
+    tempo 200;
+    signature 4 / 4;
+    piano {
+        clef clefG;
+        tabs myTabs {
+            c(q) d(q) e(q) f(q) | g(q) a(q) b(q) c(q)
+        }
+    }
+  }
+}
+Note myNote = Note(c,7,marimba);
+score myOtherScore {
+  {
+    tempo 200;
+    signature 4 / 4;
+    piano {
+        clef clefG;
+        tabs {
+            C7 Cmaj7(8,w) R(q) f(q) | g(q) a(q) b(q) c(q)
+        }
+    }
+  }
+}
+Chord myChord = Chord(c, e, g, d#);
+Integer myPitch2 = 15;
