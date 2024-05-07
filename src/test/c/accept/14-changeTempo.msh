@@ -1,0 +1,22 @@
+score myScore {
+    {
+        tempo 200;
+        signature 4 / 4;
+        piano {
+            clef clefG;
+            tabs myTabs {
+                c(q) d(q) e(q) f(q) | g(q) a(q) b(q) c(q)
+            }
+        }
+    }
+    {
+        tempo 150;
+        signature 4 / 4;
+        piano {
+            clef clefG;
+            tabs myTabs {
+                c(q) d(q) e(q) f(q) | g(q) a(q) b(q) c(q)
+            }
+        }
+    }
+}

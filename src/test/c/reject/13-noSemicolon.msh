@@ -1,0 +1,5 @@
+Chord myChord4 = Chord(a7);
+Chord myChord = Chord(c1, e4, g7, d#10);
+Chord myChord2 = Chord(a#, f4, g5)
+Chord myChord3 = Chord(eb3, d, c, bb, a#);
+Chord myChord5 = Chord(c, eb);

@@ -1,0 +1,11 @@
+score myScore {
+    {
+        signature 4 / 4;
+        piano {
+            clef clefG;
+            tabs myTabs {
+                c(q) d(q) e(q) f(q) | g(q) a(q) b(q) c(q)
+            }
+        }
+    }
+}
