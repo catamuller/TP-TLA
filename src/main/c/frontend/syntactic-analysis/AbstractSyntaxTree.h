@@ -75,6 +75,12 @@ enum tabsSentenceType {
 	TABSSENTENCEWITHID,
 	TABSSENTENCENOID
 };
+enum controlType{
+	REPEAT,
+	AFTER,
+	BEFORE,
+	ALONG
+};
 
 typedef enum tabValuesType tabValuesType;
 typedef enum ExpressionType ExpressionType;
@@ -88,6 +94,7 @@ typedef enum ExpressionsType ExpressionsType;
 typedef enum ChordValuesType ChordValuesType;
 typedef enum ScoreExpressionsType ScoreExpressionsType;
 typedef enum tabsSentenceType tabsSentenceType;
+typedef enum controlType controlType;
 
 
 typedef struct Constant Constant;
@@ -128,6 +135,9 @@ typedef struct control control;
 typedef struct repeat repeat;
 typedef struct transpose transpose;
 typedef struct clefDeclaration clefDeclaration;
+typedef struct after after;
+typedef struct before before;
+typedef struct along along;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -165,11 +175,27 @@ struct instrument {
 
 struct control {
 	control * _control;
-	repeat * _repeat;
+	union {
+		repeat * _repeat;
+		after * _after;
+		before * _before;
+		along * _along;
+	};
+	controlType type;
 };
 
 struct repeat {
 	Integer _repeat;
+};
+
+struct after{
+	id * _id;
+};
+struct before{
+	id * _id;
+};
+struct along{
+	id * _id;
 };
 
 struct transpose {

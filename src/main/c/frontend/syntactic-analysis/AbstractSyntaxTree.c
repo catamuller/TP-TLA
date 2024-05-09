@@ -326,10 +326,47 @@ void releaseRepeat(repeat * _repeat) {
 void releaseControl(control * _control) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_control != NULL) {
-		releaseRepeat(_control->_repeat);
-		releaseControl(_control->_control);
-
+		switch(_control->type){
+			case REPEAT:
+				releaseRepeat(_control->_repeat);
+				releaseControl(_control->_control);
+				break;
+			case AFTER:
+				releaseAfter(_control->_after);
+				releaseControl(_control->_control);
+				break;
+			case BEFORE:
+				releaseBefore(_control->_before);
+				releaseControl(_control->_control);
+				break;
+			case ALONG:
+				releaseAlong(_control->_along);
+				releaseControl(_control->_control);
+				break;
+		}
 		free(_control);
+	}
+}
+
+releaseAfer(after * _after){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_after!=NULL){
+		releaseTab(_after->_id);
+		free(_after);
+	}
+}
+releaseBefore(before * _before){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_before!=NULL){
+		releaseTab(_before->_id);
+		free(_before);
+	}
+}
+releaseAlong(along * _along){
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if(_along!=NULL){
+		releaseTab(_along->_id);
+		free(_along);
 	}
 }
 

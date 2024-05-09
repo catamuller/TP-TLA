@@ -390,7 +390,32 @@ control * controlSemanticAction(repeat * _repeat, control * _control) {
 	control * toReturn = calloc(1, sizeof(control));
 	toReturn->_control = _control;
 	toReturn->_repeat = _repeat;
+	toReturn->type = REPEAT;
+	return toReturn;
+}
 
+control * controlAfterSemanticAction(after * _after, control * _control) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	control * toReturn = calloc(1, sizeof(control));
+	toReturn->_control = _control;
+	toReturn->_after = _after;
+	toReturn->type = AFTER;
+	return toReturn;
+}
+control * controlBeforeSemanticAction(before * _before control * _control) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	control * toReturn = calloc(1, sizeof(control));
+	toReturn->_control = _control;
+	toReturn->_before = _before;
+	toReturn->type = BEFORE;
+	return toReturn;
+}
+control * controlAlongSemanticAction(along * _along, control * _control) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	control * toReturn = calloc(1, sizeof(control));
+	toReturn->_control = _control;
+	toReturn->_along = _along;
+	toReturn->type = ALONG;
 	return toReturn;
 }
 
@@ -398,7 +423,25 @@ repeat * repeatSemanticAction(Integer _repeat) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	repeat * toReturn = calloc(1, sizeof(repeat));
 	toReturn->_repeat = _repeat;
+	return toReturn;
+}
 
+after * afterSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	after * toReturn = calloc(1, sizeof(after));
+	toReturn->_id = _id;
+	return toReturn;
+}
+before * beforeSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	before * toReturn = calloc(1, sizeof(before));
+	toReturn->_id = _id;
+	return toReturn;
+}
+along * alongSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	along * toReturn = calloc(1, sizeof(along));
+	toReturn->_id = _id;
 	return toReturn;
 }
 

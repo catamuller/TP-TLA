@@ -275,11 +275,22 @@ tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES	control	{ $$ = tabsSentenceS
 	;
 
 control: DOT repeat control				{ $$ = controlSemanticAction($2, $3); }
+	| DOT after ID control					{ $$ = controlSemanticAction($3, $4); }
+	| DOT before ID control				{ $$ = controlSemanticAction($3, $4); }
+	| DOT along ID control					{ $$ = controlSemanticAction($3, $4); }
 	| %empty												{ $$ = controlSemanticAction(NULL, NULL); }
 	;
 
 repeat: REPEAT										{ $$ = repeatSemanticAction($1); }
 	;
+
+after: TAB								{ $$ = afterSemanticAction($1); }
+	;
+before: TAB								{ $$ = beforeSemanticAction($1); }
+	;
+along: TAB								{ $$ = alongSemanticAction($1); }
+	;
+
 
 transpose: DOT TRANSPOSE		{ $$ = transposeSemanticAction($2); }
 	| %empty					{ $$ = transposeSemanticAction(0); }

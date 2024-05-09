@@ -1,0 +1,6 @@
+int myPitch = 7;
+Note myNote = Note(c, myPitch, MARIMBA);
+Chord myChord = Chord(c, e, g, d#);
+Tab myTab = Tab(C7(5, q)arp myNote myChord a(5, q));
+
+tabs { c e f g | C}.after(myTab);
