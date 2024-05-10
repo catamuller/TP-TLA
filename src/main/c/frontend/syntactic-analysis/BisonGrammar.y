@@ -292,17 +292,17 @@ control: DOT repeat control				{ $$ = controlSemanticAction($2, $3); }
 	| DOT after control					{ $$ = controlAfterSemanticAction($2, $3); }
 	| DOT before control				{ $$ = controlBeforeSemanticAction($2, $3); }
 	| DOT along control					{ $$ = controlAlongSemanticAction($2, $3); }
-	| %empty												{ $$ = controlSemanticAction(NULL, NULL); }
+	| SEMICOLON					{ $$ = controlSemanticAction(NULL, NULL); }
 	;
 
 repeat: REPEAT										{ $$ = repeatSemanticAction($1); }
 	;
 
-after: AFTER OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = afterSemanticAction($3); }
-	;
-before: BEFORE OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = beforeSemanticAction($3); }
-	;
-along: ALONG OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = alongSemanticAction($3); }
+after: AFTER OPEN_PARENTHESIS id CLOSE_PARENTHESIS  					{ $$ = afterSemanticAction($3); }
+
+before: BEFORE OPEN_PARENTHESIS id CLOSE_PARENTHESIS 				{ $$ = beforeSemanticAction($3); }
+
+along: ALONG OPEN_PARENTHESIS id CLOSE_PARENTHESIS 			{ $$ = alongSemanticAction($3); }
 	;
 
 
