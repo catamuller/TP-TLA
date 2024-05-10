@@ -375,12 +375,20 @@ void releaseAlong(along * _along){
 	}
 }
 
+void releaseControlSentence(controlSentence * _control) {
+	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
+	if (_control != NULL) {
+		releaseControl(_control->_control);
+		free(_control);
+	}
+}
+
 void releaseTabsSentence(tabsSentence * tabsSentence){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (tabsSentence != NULL) {
 		releaseId(tabsSentence->_id);
 		releaseTabs(tabsSentence->_tabs);
-		releaseControl(tabsSentence->_control);
+		releaseControlSentence(tabsSentence->_control);
 	
 		free(tabsSentence);
 	}

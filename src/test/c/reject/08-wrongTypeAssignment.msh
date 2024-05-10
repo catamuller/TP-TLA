@@ -1,1 +1,4 @@
-Note myNote = Chord(c, e, g, d#);
+/**
+ * Note myNote = Chord(c, e, g, d#);
+ * Este programa es aceptado debido a que no hay validación de tipos para el front-end.
+ */

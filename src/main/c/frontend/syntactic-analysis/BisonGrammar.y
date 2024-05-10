@@ -58,6 +58,7 @@
 	before * beforeType;
 	after * afterType;
 	along * alongType;
+	controlSentence * controlSentenceType;
 
 	Expression * expression;
 	Program * program;
@@ -160,6 +161,7 @@
 %type <beforeType> before
 %type <afterType> after
 %type <alongType> along
+%type <controlSentenceType> controlSentence
 
 %type <expression> expression
 %type <program> program
@@ -283,26 +285,29 @@ clefSentence: CLEF clef SEMICOLON						{ $$ = clefSentenceSemanticAction($2); }
 clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 	;
 
-tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES	control	{ $$ = tabsSentenceSemanticAction($2, $4, $6); }
-	| TABS OPEN_BRACES tabs CLOSE_BRACES control							{ $$ = tabsSentenceSemanticAction(NULL, $3, $5); }
-	| id 																											{ $$ = tabsSentenceSemanticAction($1, NULL, NULL); }	
+tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES	controlSentence	{ $$ = tabsSentenceSemanticAction($2, $4, $6); }
+	| TABS OPEN_BRACES tabs CLOSE_BRACES controlSentence							{ $$ = tabsSentenceSemanticAction(NULL, $3, $5); }
+	| id 																															{ $$ = tabsSentenceSemanticAction($1, NULL, NULL); }	
 	;
+
+controlSentence: control																						{ $$ = controlSentenceSemanticAction($1); }
+	| %empty																													{ $$ = controlSentenceSemanticAction(NULL); }
 
 control: DOT repeat control				{ $$ = controlSemanticAction($2, $3); }
 	| DOT after control					{ $$ = controlAfterSemanticAction($2, $3); }
 	| DOT before control				{ $$ = controlBeforeSemanticAction($2, $3); }
 	| DOT along control					{ $$ = controlAlongSemanticAction($2, $3); }
-	| SEMICOLON					{ $$ = controlSemanticAction(NULL, NULL); }
+	| SEMICOLON									{ $$ = controlSemanticAction(NULL, NULL); }
 	;
 
 repeat: REPEAT										{ $$ = repeatSemanticAction($1); }
 	;
 
-after: AFTER OPEN_PARENTHESIS id CLOSE_PARENTHESIS  					{ $$ = afterSemanticAction($3); }
-
-before: BEFORE OPEN_PARENTHESIS id CLOSE_PARENTHESIS 				{ $$ = beforeSemanticAction($3); }
-
-along: ALONG OPEN_PARENTHESIS id CLOSE_PARENTHESIS 			{ $$ = alongSemanticAction($3); }
+after: AFTER OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = afterSemanticAction($3); }
+	;
+before: BEFORE OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = beforeSemanticAction($3); }
+	;
+along: ALONG OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = alongSemanticAction($3); }
 	;
 
 

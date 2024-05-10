@@ -413,7 +413,14 @@ clef * clefSemanticAction(Clef _clef) {
 	return toReturn;
 }
 
-tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, control * _control){
+controlSentence * controlSentenceSemanticAction(control * _control) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	controlSentence * toReturn = calloc(1, sizeof(controlSentence));
+	toReturn->_control = _control;
+	return toReturn;
+}
+
+tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, controlSentence * _control){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	tabsSentence * toReturn = calloc(1, sizeof(tabsSentence));
 	if (_id != NULL) {

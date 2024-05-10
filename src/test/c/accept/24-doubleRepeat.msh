@@ -6,7 +6,7 @@ score myScore {
             clef clefG;
             tabs myTabs {
                 c(q) d(q) e(q) f(q) | g(q) a(q) b(q) c(q)
-            }.repeat(3).repeat(2)
+            }.repeat(3).repeat(2);
         }
     }
 }

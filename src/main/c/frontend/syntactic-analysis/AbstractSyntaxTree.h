@@ -146,6 +146,7 @@ typedef struct clefDeclaration clefDeclaration;
 typedef struct after after;
 typedef struct before before;
 typedef struct along along;
+typedef struct controlSentence controlSentence;
 
 /**
  * Node types for the Abstract Syntax Tree (AST).
@@ -214,6 +215,10 @@ struct along{
 	id * _id;
 };
 
+struct controlSentence {
+	control * _control;
+};
+
 struct transpose {
 	Integer _transpose;
 };
@@ -250,7 +255,7 @@ struct id {
 struct tabsSentence {
 	id * _id;
 	tabs * _tabs;
-	control * _control;
+	controlSentence * _control;
 
 	tabsSentenceType type;
 };

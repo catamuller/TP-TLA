@@ -168,7 +168,9 @@ repeat * repeatSemanticAction(Integer _repeat);
 
 clef * clefSemanticAction(Clef _clef);
 
-tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, control * _control);
+tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, controlSentence * _control);
+
+controlSentence * controlSentenceSemanticAction(control * _control);
 
 tabs * tabsPipeSemanticAction(tab * _tab, tabs * _tabs);
 

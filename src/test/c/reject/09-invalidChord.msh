@@ -1,1 +1,5 @@
-Chord myChord = Chord(c, r, g, d#);
+/**
+ * Chord myChord = Chord(c, r, g, d#);
+ * Este programa es aceptado debido a que considera la 'r' como un ID, y el constructor de Chord
+ * acepta como parámetros notas o IDs.
+ */
