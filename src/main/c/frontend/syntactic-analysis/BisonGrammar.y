@@ -55,6 +55,9 @@
 	transpose * transposeType;
 	control * controlType;
 	clefDeclaration * clefDeclarationType;
+	before * beforeType;
+	after * afterType;
+	along * alongType;
 
 	Expression * expression;
 	Program * program;
@@ -154,6 +157,9 @@
 %type <transposeType> transpose
 %type <controlType> control
 %type <clefDeclarationType> clefDeclaration
+%type <beforeType> before
+%type <afterType> after
+%type <alongType> along
 
 %type <expression> expression
 %type <program> program
@@ -198,6 +204,7 @@ expression: noteExpression 											{ $$ = expressionNoteExpresionSemanticActi
 	| chordExpression							{ $$ = expressionChordExpressionSemanticAction($1); }
 	| pitch SEMICOLON									{ $$ = expressionPitchSemanticAction($1); }
 	| tabExpression										{ $$ = expressionTabExpression($1); }
+	| tabsSentence										{ $$ = expressionTabSentenceSemanticAction($1); }
 	;
 
 noteExpression: NOTECLASS OPEN_PARENTHESIS note COMMA pitch COMMA instrument CLOSE_PARENTHESIS SEMICOLON		{ $$ = noteExpressionSemanticAction($3, $5, $7); }	
@@ -221,13 +228,19 @@ tabValues: note tabValues								{ $$ = tabValuesNoteTabValuesSemanticAction($1,
 	| rest																{ $$ = tabValuesRestTabValuesSemanticAction($1, NULL); }
 
 pitch: INTEGER													{ $$ = PitchSemanticAction($1); }
+	|	id																	{ $$ = PitchIdSemanticAction($1); }
 	;
 
 note: NOTE															{ $$ = NoteSemanticAction($1); }
+	| id																	{ $$ = NoteIdSemanticAction($1); }
 	;
 
 chord: CHORD														{ $$ = ChordSemanticAction($1); }
+//	| id																	{ $$ = ChordIdSemanticAction($1); }
 	;
+
+rest: REST															{ $$ = restSemanticAction($1); }
+//	| id																	{ $$ = restIdSemanticAction($1); }
 
 instrument: INSTRUMENT												{ $$ = InstrumentSemanticAction($1); }
 	;
@@ -271,24 +284,25 @@ clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 	;
 
 tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES	control	{ $$ = tabsSentenceSemanticAction($2, $4, $6); }
-	| TABS OPEN_BRACES tabs CLOSE_BRACES control								{ $$ = tabsSentenceSemanticAction(NULL, $3, $5); }
+	| TABS OPEN_BRACES tabs CLOSE_BRACES control							{ $$ = tabsSentenceSemanticAction(NULL, $3, $5); }
+	| id SEMICOLON																						{ $$ = tabsSentenceSemanticAction($1, NULL, NULL); }	
 	;
 
 control: DOT repeat control				{ $$ = controlSemanticAction($2, $3); }
-	| DOT after ID control					{ $$ = controlSemanticAction($3, $4); }
-	| DOT before ID control				{ $$ = controlSemanticAction($3, $4); }
-	| DOT along ID control					{ $$ = controlSemanticAction($3, $4); }
+	| DOT after control					{ $$ = controlAfterSemanticAction($2, $3); }
+	| DOT before control				{ $$ = controlBeforeSemanticAction($2, $3); }
+	| DOT along control					{ $$ = controlAlongSemanticAction($2, $3); }
 	| %empty												{ $$ = controlSemanticAction(NULL, NULL); }
 	;
 
 repeat: REPEAT										{ $$ = repeatSemanticAction($1); }
 	;
 
-after: TAB								{ $$ = afterSemanticAction($1); }
+after: AFTER OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = afterSemanticAction($3); }
 	;
-before: TAB								{ $$ = beforeSemanticAction($1); }
+before: BEFORE OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = beforeSemanticAction($3); }
 	;
-along: TAB								{ $$ = alongSemanticAction($1); }
+along: ALONG OPEN_PARENTHESIS id CLOSE_PARENTHESIS							{ $$ = alongSemanticAction($3); }
 	;
 
 
@@ -308,7 +322,6 @@ tab: note tab 					{ $$ = tabNoteTabSemanticAction($1, $2); }
 	| rest 						{ $$ = tabRestTabSemanticAction($1, NULL); }
 	;
 
-rest: REST					{ $$ = restSemanticAction($1); }
 /**
 // expression: expression[left] ADD expression[right]					{ $$ = ArithmeticExpressionSemanticAction($left, $right, ADDITION); }
 //	| expression[left] DIV expression[right]						{ $$ = ArithmeticExpressionSemanticAction($left, $right, DIVISION); }

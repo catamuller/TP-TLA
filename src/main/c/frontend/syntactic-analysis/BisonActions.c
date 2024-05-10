@@ -246,6 +246,15 @@ note * NoteSemanticAction(Note _note) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	note * toReturn = calloc(1, sizeof(note));
 	toReturn->note = _note;
+	toReturn->type = TERMINAL;
+	return toReturn;
+}
+
+note * NoteIdSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	note * toReturn = calloc(1, sizeof(note));
+	toReturn->_id = _id;
+	toReturn->type = NONTERMINAL;
 	return toReturn;
 }
 
@@ -253,9 +262,33 @@ pitch * PitchSemanticAction(Integer _pitch) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	pitch * toReturn = calloc(1, sizeof(pitch));
 	toReturn->_pitch = _pitch;
+	toReturn->type = TERMINAL;
 	return toReturn;
 }
 
+pitch * PitchIdSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	pitch * toReturn = calloc(1, sizeof(pitch));
+	toReturn->_id = _id;
+	toReturn->type = NONTERMINAL;
+	return toReturn;
+}
+
+chord * ChordIdSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	chord * toReturn = calloc(1, sizeof(chord));
+	toReturn->_id = _id;
+	toReturn->type = NONTERMINAL;
+	return toReturn;
+}
+/*
+rest * restIdSemanticAction(id * _id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	rest * toReturn = calloc(1, sizeof(rest));
+	toReturn->_id = _id;
+	return toReturn;
+}
+*/
 id * IDSemanticAction(IDM _id) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	id * toReturn = calloc(1, sizeof(id));
@@ -267,6 +300,7 @@ chord * ChordSemanticAction(Chord _chord) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	chord * toReturn = calloc(1, sizeof(chord));
 	toReturn->chord = _chord;
+	toReturn->type = TERMINAL;
 	return toReturn;
 }
 
@@ -315,6 +349,14 @@ Expression * expressionNoteExpresionSemanticAction(noteExpression * _noteExpress
 	Expression * toReturn = calloc(1, sizeof(Expression));
 	toReturn->noteExpression = _noteExpression;
 	toReturn->type = NOTEEXPRESSION;
+	return toReturn;
+}
+
+Expression * expressionTabSentenceSemanticAction(tabsSentence * _tabsSentence) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Expression * toReturn = calloc(1, sizeof(Expression));
+	toReturn->_tabsSentence = _tabsSentence;
+	toReturn->type = TABSENTENCETYPE;
 	return toReturn;
 }
 
@@ -375,7 +417,10 @@ tabsSentence * tabsSentenceSemanticAction(id * _id, tabs * _tabs, control * _con
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	tabsSentence * toReturn = calloc(1, sizeof(tabsSentence));
 	if (_id != NULL) {
-		toReturn->type = TABSSENTENCEWITHID;
+		if (_tabs != NULL)
+			toReturn->type = TABSSENTENCEWITHID;
+		else
+			toReturn->type = TABSSENTENCEWITHONLYID;
 	} else {
 		toReturn->type = TABSSENTENCENOID;
 	}
@@ -390,7 +435,7 @@ control * controlSemanticAction(repeat * _repeat, control * _control) {
 	control * toReturn = calloc(1, sizeof(control));
 	toReturn->_control = _control;
 	toReturn->_repeat = _repeat;
-	toReturn->type = REPEAT;
+	toReturn->type = REPEATT;
 	return toReturn;
 }
 
@@ -399,15 +444,15 @@ control * controlAfterSemanticAction(after * _after, control * _control) {
 	control * toReturn = calloc(1, sizeof(control));
 	toReturn->_control = _control;
 	toReturn->_after = _after;
-	toReturn->type = AFTER;
+	toReturn->type = AFTERT;
 	return toReturn;
 }
-control * controlBeforeSemanticAction(before * _before control * _control) {
+control * controlBeforeSemanticAction(before * _before, control * _control) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	control * toReturn = calloc(1, sizeof(control));
 	toReturn->_control = _control;
 	toReturn->_before = _before;
-	toReturn->type = BEFORE;
+	toReturn->type = BEFORET;
 	return toReturn;
 }
 control * controlAlongSemanticAction(along * _along, control * _control) {
@@ -415,7 +460,7 @@ control * controlAlongSemanticAction(along * _along, control * _control) {
 	control * toReturn = calloc(1, sizeof(control));
 	toReturn->_control = _control;
 	toReturn->_along = _along;
-	toReturn->type = ALONG;
+	toReturn->type = ALONGT;
 	return toReturn;
 }
 

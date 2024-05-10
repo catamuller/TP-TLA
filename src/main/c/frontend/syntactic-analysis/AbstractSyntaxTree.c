@@ -156,6 +156,9 @@ void releaseExpression(Expression * expression) {
 			case TABEXPRESSIONTYPE:
 				releaseTabExpression(expression->_tabExpression);
 				break;
+			case TABSENTENCETYPE:
+				releaseTabsSentence(expression->_tabsSentence);
+				break;
 		}
 		free(expression);
 	}	
@@ -172,6 +175,8 @@ void releaseChordExpression(chordExpression * _chordExpression){
 void releasePitch(pitch * _pitch){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(_pitch!=NULL){
+		if (_pitch->type == NONTERMINAL)
+			releaseId(_pitch->_id);
 		free(_pitch);
 	}
 }
@@ -327,19 +332,19 @@ void releaseControl(control * _control) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (_control != NULL) {
 		switch(_control->type){
-			case REPEAT:
+			case REPEATT:
 				releaseRepeat(_control->_repeat);
 				releaseControl(_control->_control);
 				break;
-			case AFTER:
+			case AFTERT:
 				releaseAfter(_control->_after);
 				releaseControl(_control->_control);
 				break;
-			case BEFORE:
+			case BEFORET:
 				releaseBefore(_control->_before);
 				releaseControl(_control->_control);
 				break;
-			case ALONG:
+			case ALONGT:
 				releaseAlong(_control->_along);
 				releaseControl(_control->_control);
 				break;
@@ -348,24 +353,24 @@ void releaseControl(control * _control) {
 	}
 }
 
-releaseAfer(after * _after){
+void releaseAfter(after * _after){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(_after!=NULL){
-		releaseTab(_after->_id);
+		releaseId(_after->_id);
 		free(_after);
 	}
 }
-releaseBefore(before * _before){
+void releaseBefore(before * _before){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(_before!=NULL){
-		releaseTab(_before->_id);
+		releaseId(_before->_id);
 		free(_before);
 	}
 }
-releaseAlong(along * _along){
+void releaseAlong(along * _along){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if(_along!=NULL){
-		releaseTab(_along->_id);
+		releaseId(_along->_id);
 		free(_along);
 	}
 }

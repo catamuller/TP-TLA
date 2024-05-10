@@ -1,4 +1,4 @@
 Note myNote = Note(c,7,piano);
 Chord myChord = Chord(c, e, g, d#);
 
-Tab myTab = Tab(C7(5, q)arp myNote myChord a(5, q));
+Tab myTab = Tab(C7(5, q)arp myNote myChord a5(q));

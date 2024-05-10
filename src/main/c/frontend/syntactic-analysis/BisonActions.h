@@ -140,6 +140,26 @@ instruments * instrumentsInstrumentInstrumentsSemanticAction(instrument * _instr
 
 clefDeclaration * clefDeclarationSemanticAction(clefSentence * _clefSentence, sentences * _sentences);
 
+after * afterSemanticAction(id * _id);
+
+before * beforeSemanticAction(id * _id);
+
+along * alongSemanticAction(id * _id);
+
+control * controlAfterSemanticAction(after * _after, control * _control);
+
+control * controlBeforeSemanticAction(before * _before, control * _control);
+
+control * controlAlongSemanticAction(along * _along, control * _control);
+
+pitch * PitchIdSemanticAction(id * _id);
+
+chord * ChordIdSemanticAction(id * _id);
+
+note * NoteIdSemanticAction(id * _id);
+
+Expression * expressionTabSentenceSemanticAction(tabsSentence * _tabsSentence);
+
 clefSentence * clefSentenceSemanticAction(clef * _clef);
 
 control * controlSemanticAction(repeat * _repeat, control * _control);

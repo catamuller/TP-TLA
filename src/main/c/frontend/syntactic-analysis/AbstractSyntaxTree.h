@@ -18,7 +18,8 @@ enum ExpressionType {
 	SCOREEXPRESSION,
 	CHORDEXPRESSION,
 	PITCHEXPRESSION,
-	TABEXPRESSIONTYPE
+	TABEXPRESSIONTYPE,
+	TABSENTENCETYPE
 };
 
 // enum FactorType {
@@ -43,6 +44,11 @@ enum tabValuesType {
 	TABVALUESNOTE,
 	TABVALUESCHORD,
 	TABVALUESREST
+};
+
+enum TerminalType {
+	TERMINAL,
+	NONTERMINAL
 };
 
 enum SentencesType {
@@ -72,16 +78,18 @@ enum ChordValuesType{
 };
 
 enum tabsSentenceType {
+	TABSSENTENCEWITHONLYID,
 	TABSSENTENCEWITHID,
 	TABSSENTENCENOID
 };
 enum controlType{
-	REPEAT,
-	AFTER,
-	BEFORE,
-	ALONG
+	REPEATT,
+	AFTERT,
+	BEFORET,
+	ALONGT
 };
 
+typedef enum TerminalType TerminalType;
 typedef enum tabValuesType tabValuesType;
 typedef enum ExpressionType ExpressionType;
 typedef enum FactorType FactorType;
@@ -152,11 +160,19 @@ struct type {
 };
 
 struct chord {
-	Chord chord;
+	union {
+		Chord chord;
+		id * _id;
+	};
+	TerminalType type;
 };
 
 struct note {
-	Note note;
+	union {
+		Note note;
+		id * _id;
+	};
+	TerminalType type;
 };
 
 struct clef {
@@ -303,7 +319,11 @@ struct signature {
 };
 
 struct pitch {
-	Integer _pitch;
+	union {
+		Integer _pitch;
+		id * _id;
+	};
+	TerminalType type;
 };
 
 
@@ -364,6 +384,7 @@ struct Expression {
 		chordExpression * _chordExpression;
 		pitch * _pitch;
 		tabExpression * _tabExpression;
+		tabsSentence * _tabsSentence;
 	};
 	ExpressionType type;
 };
@@ -430,4 +451,7 @@ void releaseScoreExpressions(scoreExpressions * _scoreExpressions);
 void releaseControl(control * _control);
 void releaseRepeat(repeat * _repeat);
 void releaseTransposition(transpose * _transposition);
+void releaseAlong(along * _along);
+void releaseBefore(before * _before);
+void releaseAfter(after * _after);
 #endif

@@ -3,7 +3,7 @@ score myScore {
         tempo 200;
         signature 4 / 4;
         piano {
-            clef g;
+            clef clefG;
             tabs myTabs {
                 c5(q) e5(q) f5(h) | d5(h) a5(q) c5(q) | a5(q) b5(h) c5(q) 
             }
