@@ -3,7 +3,8 @@
 
 typedef enum {
 	false = 0,
-	true = 1
+	true = 1,
+	error = 2
 } boolean;
 
 typedef int Token;

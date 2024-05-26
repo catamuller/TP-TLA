@@ -132,6 +132,8 @@ tabValues * tabValuesChordTabValuesSemanticAction(chord * _chord, tabValues * _t
 
 tabValues * tabValuesRestTabValuesSemanticAction(rest * _rest, tabValues * _tabValues);
 
+tabValues * tabValuesIdTabValuesSemanticAction(id * _id, tabValues * _tabValues);
+
 Expression * expressionTabExpression(tabExpression * _tabExpression);
 
 Expression * expressionScoreExpressionSemanticAction(score * _scoreExpression);

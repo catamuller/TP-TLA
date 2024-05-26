@@ -1,18 +1,23 @@
 #include "Generator.h"
 
+
+
 /* MODULE INTERNAL STATE */
 
 const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
+FILE * file = NULL;
 
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
+	file = stdout;//fopen("output.txt", "w");
 }
 
 void shutdownGeneratorModule() {
 	if (_logger != NULL) {
 		destroyLogger(_logger);
+		fclose(file);
 	}
 }
 
@@ -20,13 +25,13 @@ void shutdownGeneratorModule() {
 
 static const char _expressionTypeToCharacter(const ExpressionType type);
 static void _generateConstant(const unsigned int indentationLevel, Constant * constant);
-static void _generateEpilogue(const int value);
+static void _generateEpilogue();
 static void _generateExpression(const unsigned int indentationLevel, Expression * expression);
 static void _generateFactor(const unsigned int indentationLevel, Factor * factor);
 static void _generateProgram(Program * program);
 static void _generatePrologue(void);
 static char * _indentation(const unsigned int indentationLevel);
-static void _output(const unsigned int indentationLevel, const char * const format, ...);
+static void _output(FILE * file,const unsigned int indentationLevel, const char * const format, ...);
 
 /**
  * Converts and expression type to the proper character of the operation
@@ -59,18 +64,6 @@ static void _generateConstant(const unsigned int indentationLevel, Constant * co
 }
 */
 
-/**
- * Creates the epilogue of the generated output, that is, the final lines that
- * completes a valid Latex document.
- */
-static void _generateEpilogue(const int value) {
-	_output(0, "%s%d%s",
-		"            [ $", value, "$, circle, draw, blue ]\n"
-		"        ]\n"
-		"    \\end{forest}\n"
-		"\\end{document}\n\n"
-	);
-}
 
 /**
  * Generates the output of an expression.
@@ -122,32 +115,131 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 	_output(indentationLevel, "%s", "]\n");
 }
 */
+static void _generateType(const unsigned int identationLevel, type * type) {
+	if (type->class == NOTECLASS) {
+		_output(file, 0, "%s", " String ");
+	} else if (type->class == CHORDCLASS) {
+		_output(file, 0, "%s", " String ");
+	} else if (type->class == TABCLASS) {
+		_output(file, 0, "%s", " String ");
+	} else if (type->class == RESTCLASS) {
+		_output(file, 0, "%s", " String ");
+	} else if (type->class == INTEGERCLASS) {
+		_output(file, 0, "%s", " String ");
+	} else {
+		logError(_logger, "The specified expressions type is unknown: %d", type->class);
+	}
+}
+
+static void _generateId(const unsigned int identationLevel, id * id) {
+	_output(file, 0, " %s ", id->id);
+}
+
+static void _generateNote(const unsigned int identationLevel, note * note) {
+	
+}
+
+static void _generateNoteExpression(const unsigned int identationLevel, noteExpression * noteExpression) {
+	char noteOrId;
+	if (noteExpression->_note->type == TERMINAL) {
+		_output(file, 0,"\"[%s]%s%d\";\n", noteExpression->_instrument->instrument, noteExpression->_note->note, noteExpression->_pitch->_pitch);
+	} else {
+		_output(file, 0,"\"[%s]%s%d\";\n", noteExpression->_instrument->instrument, noteExpression->_note->_id, noteExpression->_pitch->_pitch);
+	}
+}
+
+static void _generateScore(const unsigned int identationLevel, score * score) {
+
+}
+
+static void _generateChordExpression(const unsigned int identationLevel, chordExpression * chordExpression) {
+
+}
+
+static void _generatePitch(const unsigned int identationLevel, pitch * pitch) {
+
+}
+
+static void _generateTabExpression(const unsigned int identationLevel, tabExpression * tabExpression) {
+
+}
+
+static void _generateTabsSentence(const unsigned int identationLevel, tabsSentence * tabsSentence) {
+
+}
+
+static void _generateExpression(const unsigned int identationLevel, Expression * expression) {
+	if (expression->type == NOTEEXPRESSION) {
+		_generateNoteExpression(0, expression->noteExpression);
+	} else if (expression->type == SCOREEXPRESSION) {
+		_generateScore(0, expression->_score);
+	} else if (expression->type == CHORDEXPRESSION) {
+		_generateChordExpression(0, expression->_chordExpression);
+	} else if (expression->type == PITCHEXPRESSION) {
+		_generatePitch(0, expression->_pitch);
+	} else if (expression->type == TABEXPRESSIONTYPE) {
+		_generateTabExpression(0, expression->_tabExpression);
+	} else if (expression->type == TABSENTENCETYPE) {
+		_generateTabsSentence(0, expression->_tabsSentence);
+	} else {
+		logError(_logger, "The specified expressions type is unknown: %d", expression->type);
+	}
+}
+
+static void _generateAssignment(const unsigned int identationLevel, assignment * assignment) {
+	_generateType(0, assignment->_class);
+	_generateId(0, assignment->_id);
+	_output(file, 0, "%s", " = ");
+	_generateExpression(0, assignment->expression);
+}
+
+
+static void _generateProgramExpression(const unsigned int identationLevel, programExpression * programExpression) {
+	if (programExpression->type == ASSIGNMENT) {
+		_generateAssignment(0, programExpression->assignment);
+	} else if (programExpression->type == EXPRESSION) {
+		_generateExpression(0, programExpression->expression);
+	} else {
+		logError(_logger, "The specified expressions type is unknown: %d", programExpression->type);
+	}
+}
+
+static void _generateExpressions(const unsigned int indentationLevel, expressions * expressions) {
+	if (expressions->type == EXPRESSIONSTYPE) {
+			_generateProgramExpression(1 + indentationLevel, expressions->_programExpression);
+			_generateExpressions(0, expressions->expressions);
+	} else if (expressions->type == PROGRAMEXPRESSIONTYPE) {
+			_generateProgramExpression(1 + indentationLevel, expressions->programExpression_);
+	} else {
+		logError(_logger, "The specified expressions type is unknown: %d", expressions->type);
+	}
+}
 
 /**
  * Generates the output of the program.
  */
 static void _generateProgram(Program * program) {
-	//_generateExpression(3, program->expression);
+	_generateExpressions(3, program->_expressions);
 }
 
-/**
- * Creates the prologue of the generated output, a Latex document that renders
- * a tree thanks to the Forest package.
- *
- * @see https://ctan.dcc.uchile.cl/graphics/pgf/contrib/forest/forest-doc.pdf
- */
 static void _generatePrologue(void) {
-	_output(0, "%s",
-		"\\documentclass{standalone}\n\n"
-		"\\usepackage[utf8]{inputenc}\n"
-		"\\usepackage[T1]{fontenc}\n"
-		"\\usepackage{amsmath}\n"
-		"\\usepackage{forest}\n"
-		"\\usepackage{microtype}\n\n"
-		"\\begin{document}\n"
-		"    \\centering\n"
-		"    \\begin{forest}\n"
-		"        [ \\text{$=$}, circle, draw, purple\n"
+	_output(file, 0, "%s",
+		"package org.marimba#;\n"
+		"import org.jfugue.*;\n"
+	);
+}
+
+static void _generateClass(void) {
+	_output(file, 0, "%s",
+		"public class MarimbaMusic {\n"
+		"		public static void main(String[] args) throws Exception, RuntimeException {\n"
+	);
+}
+
+static void _generateEpilogue() {
+	_output(file, 0, "%s",
+		"		}\n"
+		"}\n"
 	);
 }
 
@@ -161,12 +253,17 @@ static char * _indentation(const unsigned int level) {
 /**
  * Outputs a formatted string to standard output.
  */
-static void _output(const unsigned int indentationLevel, const char * const format, ...) {
+static void _output(FILE * file, const unsigned int indentationLevel, const char * const format, ...) {
+	if (file == NULL) {
+        // If file pointer is NULL, opening the file failed
+        perror("Error opening file");
+        return;
+    }
 	va_list arguments;
 	va_start(arguments, format);
 	char * indentation = _indentation(indentationLevel);
 	char * effectiveFormat = concatenate(2, indentation, format);
-	vfprintf(stdout, effectiveFormat, arguments);
+	vfprintf(file, effectiveFormat, arguments);
 	free(effectiveFormat);
 	free(indentation);
 	va_end(arguments);
@@ -177,7 +274,51 @@ static void _output(const unsigned int indentationLevel, const char * const form
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
 	_generatePrologue();
+	_generateClass();
 	_generateProgram(compilerState->abstractSyntaxtTree);
-	_generateEpilogue(compilerState->value);
+	_generateEpilogue();
 	logDebugging(_logger, "Generation is done.");
 }
+
+
+/* TYPE FUNCTIONS */
+int expressionType(Expression * e) {
+	return e->type;
+}
+
+int assignmentType(assignment * a) {
+	int t = a->_class->class;
+	if (t == expressionType(a->expression)) return t;
+	logError(_logger, "The expression does not match the declaration type.");
+	return -1;
+}
+
+int noteType(note * n) {
+	if (n->type == NONTERMINAL) {
+		if(getType(n->_id->id) != NOTECLASS) {
+			logError(_logger, "Incorrect variable type. Expected: Note");
+			return -1;
+		}
+	}
+	return NOTECLASS;
+}
+
+int pitchType(pitch * n) {
+	if (n->type == NONTERMINAL) {
+		if(getType(n->_id->id) != INTEGER) {
+			logError(_logger, "Incorrect variable type. Expected: Integer");
+			return -1;
+		}
+	}
+	return INTEGER;
+}
+
+// int noteType(note * n) {
+// 	if (n->type == NONTERMINAL) {
+// 		if(getType(n->_id->id) != NOTECLASS) {
+// 			logError(_logger, "Incorrect variable type. Expected: Note");
+// 			return -1;
+// 		}
+// 	}
+// 	return NOTECLASS;
+// }

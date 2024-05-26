@@ -216,25 +216,29 @@ chordExpression: CHORDCLASS OPEN_PARENTHESIS chordValues CLOSE_PARENTHESIS SEMIC
 	;
 
 chordValues: note COMMA chordValues						{ $$ = chordValuesChordValuesSemanticAction($1, $3); }
+	| id COMMA chordValues
 	| note																			{ $$ = chordValuesNoteSemanticAction($1); }
+	| id
 	;
 
 tabExpression: TABCLASS OPEN_PARENTHESIS tabValues CLOSE_PARENTHESIS SEMICOLON			{ $$ = tabExpressionSemanticAction($3); }
 	;
 
-tabValues: note tabValues								{ $$ = tabValuesNoteTabValuesSemanticAction($1, $2); }
+tabValues: note tabValues										{ $$ = tabValuesNoteTabValuesSemanticAction($1, $2); }
 	| chord tabValues											{ $$ = tabValuesChordTabValuesSemanticAction($1, $2); }
 	| rest tabValues											{ $$ = tabValuesRestTabValuesSemanticAction($1, $2); }
-	| note																{ $$ = tabValuesNoteTabValuesSemanticAction($1, NULL); }
-	| chord																{ $$ = tabValuesChordTabValuesSemanticAction($1, NULL); }
-	| rest																{ $$ = tabValuesRestTabValuesSemanticAction($1, NULL); }
+	| id tabValues												{ $$ = tabValuesIdTabValuesSemanticAction($1, $2); }
+	| note														{ $$ = tabValuesNoteTabValuesSemanticAction($1, NULL); }
+	| chord														{ $$ = tabValuesChordTabValuesSemanticAction($1, NULL); }
+	| rest														{ $$ = tabValuesRestTabValuesSemanticAction($1, NULL); }
+	| id														{ $$ = tabValuesIdTabValuesSemanticAction($1, NULL); }
 
 pitch: INTEGER													{ $$ = PitchSemanticAction($1); }
-	|	id																	{ $$ = PitchIdSemanticAction($1); }
+	| id																	{ $$ = PitchIdSemanticAction($1); }
 	;
 
 note: NOTE															{ $$ = NoteSemanticAction($1); }
-	| id																	{ $$ = NoteIdSemanticAction($1); }
+// | id																	{ $$ = NoteIdSemanticAction($1); }
 	;
 
 chord: CHORD														{ $$ = ChordSemanticAction($1); }
@@ -322,9 +326,11 @@ tabs: tab PIPE tabs 			{ $$ = tabsPipeSemanticAction($1, $3); }
 tab: note tab 					{ $$ = tabNoteTabSemanticAction($1, $2); }
 	| chord tab 				{ $$ = tabChordTabSemanticAction($1, $2); }
 	| rest tab 					{ $$ = tabRestTabSemanticAction($1, $2); }
+	| id tab
 	| note 						{ $$ = tabNoteTabSemanticAction($1, NULL); }
 	| chord						{ $$ = tabChordTabSemanticAction($1, NULL); }
 	| rest 						{ $$ = tabRestTabSemanticAction($1, NULL); }
+	| id 
 	;
 
 /**

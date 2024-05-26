@@ -13,7 +13,7 @@ int _calcHash(char * key, long mod) {
     return h % mod;
 }
 
-boolean _mapPut(Map * map, char * key, MapValue value, int index, int startingIndex) {
+bool _mapPut(Map * map, char * key, MapValue value, int index, int startingIndex) {
   if (index == startingIndex) return FALSE;
   if (index == map->capacity)
     return _mapPut(map, key, value, 0, startingIndex);
@@ -25,7 +25,7 @@ boolean _mapPut(Map * map, char * key, MapValue value, int index, int startingIn
   return TRUE;
 }
 
-boolean _mapRemove(Map * map, char * key, int index, int startingIndex) {
+bool _mapRemove(Map * map, char * key, int index, int startingIndex) {
   if (index == startingIndex) return FALSE;
   if (index == map->capacity)
     return _mapRemove(map, key, 0, startingIndex);
@@ -62,7 +62,7 @@ void mapFree(Map * map) {
   free(map);
 }
 
-boolean mapPut(Map * map, char * key, MapValue value) {
+bool mapPut(Map * map, char * key, MapValue value) {
   if (key == NULL || *key == '\0' || map->size == map->capacity) return FALSE;
   int hash = _calcHash(key, map->capacity);
   if (map->map[hash].key != NULL) {
@@ -74,7 +74,7 @@ boolean mapPut(Map * map, char * key, MapValue value) {
   return TRUE;
 }
 
-boolean mapRemove(Map * map, char * key) {
+bool mapRemove(Map * map, char * key) {
   if (key == NULL || *key == '\0' || map->size == 0) return FALSE;
   int hash = _calcHash(key, map->capacity);
   if (strcmp(map->map[hash].key, key) != 0)

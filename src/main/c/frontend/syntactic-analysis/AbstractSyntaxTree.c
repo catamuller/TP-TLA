@@ -514,6 +514,10 @@ void releaseTabValues(tabValues * _tabValues){
 				releaseRest(_tabValues->_rest);
 				releaseTabValues(_tabValues->_tabValues);
 				break;
+			case IDTABVALUES:
+				releaseId(_tabValues->_id);
+				releaseTabValues(_tabValues->_tabValues);
+				break;
 			case TABVALUESNOTE:
 				releaseNote(_tabValues->_note);
 				break;
@@ -522,6 +526,10 @@ void releaseTabValues(tabValues * _tabValues){
 				break;
 			case TABVALUESREST:
 				releaseRest(_tabValues->_rest);
+				break;
+			case TABVALUESID:
+				releaseId(_tabValues->_id);
+				releaseTabValues(_tabValues->_tabValues);
 				break;
 		}
 		free(_tabValues);

@@ -41,9 +41,11 @@ enum tabValuesType {
 	NOTETABVALUES,
 	CHORDTABVALUES,
 	RESTTABVALUES,
+	IDTABVALUES,
 	TABVALUESNOTE,
 	TABVALUESCHORD,
-	TABVALUESREST
+	TABVALUESREST,
+	TABVALUESID
 };
 
 enum TerminalType {
@@ -66,7 +68,8 @@ enum TabsType {
 enum TabType {
 	NOTETYPE,
 	CHORDTYPE,
-	RESTTYPE
+	RESTTYPE,
+	IDTYPE
 };
 enum ProgramType {
 	ASSIGNMENT,
@@ -364,6 +367,7 @@ struct tabValues {
 		note * _note;
 		chord * _chord;
 		rest * _rest;
+		id * _id;
 	};
 	tabValues * _tabValues;
 	tabValuesType type;

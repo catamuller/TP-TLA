@@ -1,27 +1,27 @@
 #ifndef MAP_H
 #define MAP_H
 
-typedef struct {
-  char * type;
+typedef struct MapValue{
+  int type;
   char * initialization;
 } MapValue;
 
-typedef struct {
+typedef struct MapEntry{
   char * key;
   MapValue value;
 } MapEntry;
 
-typedef struct {
-  MapEntry * map;
+typedef struct Map{
+  struct MapEntry * map;
   long capacity;
   long size;
 } Map;
 
-typedef enum {TRUE, FALSE, ERROR} boolean;
+typedef enum {TRUE, FALSE, ERROR_MAP} bool;
 
 Map * mapInit(long capacity);
-int mapPut(Map * map, char * key, MapValue value);
-int mapRemove(Map * map, char * key);
+bool mapPut(Map * map, char * key, MapValue value);
+bool mapRemove(Map * map, char * key);
 MapValue mapGet(Map * map, char * key);
 
 #endif
