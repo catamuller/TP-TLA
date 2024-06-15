@@ -70,8 +70,6 @@ Token ClassLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 		token = NOTECLASS;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Chord") == 0)
 		token = CHORDCLASS;
-	if (strcmp(lexicalAnalyzerContext->lexeme, "Rest") == 0)
-		token = RESTCLASS;
 	if (strcmp(lexicalAnalyzerContext->lexeme, "Tab") == 0)
 		token = TABCLASS;
 		

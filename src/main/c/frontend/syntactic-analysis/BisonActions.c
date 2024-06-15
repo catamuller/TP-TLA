@@ -143,7 +143,7 @@ chordValues * chordValuesChordValuesSemanticAction(note * _note, chordValues * _
 chordValues * chordValuesIdChordValuesSemanticAction(id * id, chordValues * _chordValues) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	chordValues * toReturn = calloc(1, sizeof(chordValues));
-	toReturn->_idChordValues = _chordValues;
+	toReturn->_idChordVaues = _chordValues;
 	toReturn->_id = id;
 	toReturn->type = CHORDIDVALUES;
 	return toReturn;

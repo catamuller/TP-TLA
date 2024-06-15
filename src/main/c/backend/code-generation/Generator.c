@@ -21,17 +21,92 @@ void shutdownGeneratorModule() {
 	}
 }
 
+void removeSpaces(char *str) {
+    int count = 0;
+     for (int i = 0; str[i]; i++)
+        if (str[i] != ' ')
+            str[count++] = str[i];
+    str[count] = '\0';
+}
+
 /** PRIVATE FUNCTIONS */
 
-static const char _expressionTypeToCharacter(const ExpressionType type);
-static void _generateConstant(const unsigned int indentationLevel, Constant * constant);
-static void _generateEpilogue();
-static void _generateExpression(const unsigned int indentationLevel, Expression * expression);
-static void _generateFactor(const unsigned int indentationLevel, Factor * factor);
+static void _generateType(const unsigned int indentationLevel, type * type);
+
+static void _generateId(const unsigned int indentationLevel, id * id);
+
+static void _generateNote(const unsigned int indentationLevel, note * note);
+
+static void _generateNoteExpression(const unsigned int indentationLevel, noteExpression * noteExpression);
+
+static void _generateScore(const unsigned int indentationLevel, score * score);
+
+static void _generateScoreExpressions(const unsigned int indentationLevel, scoreExpressions * scoreExpressions, IDM id);
+
+static void _generateScoreExpression(const unsigned int indentationLevel, scoreExpression * scoreExpression, IDM id);
+
+static void _generateDeclaration(const unsigned int indentationLevel, declaration * declaration, IDM id);
+
+static void _generateSignature(const unsigned int indentationLevel, signature * signature, IDM id);
+
+static void _generateTempo(const unsigned int indentationLevel, tempo * tempo, IDM id);
+
+static void _generateInstruments(const unsigned int indentationLevel, instruments * instruments, IDM id);
+
+static void _generateInstrument(const unsigned int indentationLevel, instrument * instrument, IDM id);
+
+static void _generateClefDeclaration(const unsigned int indentationLevel, clefDeclaration * clefDeclaration, IDM id);
+
+static void _generateClefSentence(const unsigned int indentationLevel, clefSentence * clefSentence, IDM id);
+
+static void _generateSentences(const unsigned int indentationLevel, sentences * sentences, IDM id);
+
+static void _generateSentence(const unsigned int indentationLevel, sentence * sentence, IDM id);
+
+static void _generateChordExpression(const unsigned int indentationLevel, chordExpression * chordExpression);
+
+static void _generateChordValues(const unsigned int indentationLevel, chordValues * chordValues);
+
+static void _generatePitch(const unsigned int indentationLevel, pitch * pitch);
+
+static void _generateTabExpression(const unsigned int indentationLevel, tabExpression * tabExpression, IDM id);
+
+static void _generateTabValues(const unsigned int indentationLevel, tabValues * tabValues, IDM id);
+
+static void _generateTabsSentence(const unsigned int indentationLevel, tabsSentence * tabsSentence, IDM id);
+
+static void _generateExpression(const unsigned int indentationLevel, Expression * expression, IDM id);
+
+static void _generateAssignment(const unsigned int indentationLevel, assignment * assignment);
+
+static void _generateProgramExpression(const unsigned int indentationLevel, programExpression * programExpression);
+
+static void _generateExpressions(const unsigned int indentationLevel, expressions * expressions);
+
 static void _generateProgram(Program * program);
+
 static void _generatePrologue(void);
-static char * _indentation(const unsigned int indentationLevel);
-static void _output(FILE * file,const unsigned int indentationLevel, const char * const format, ...);
+
+static void _generateClass(void);
+
+static void _generateEpilogue(void);
+
+static char * _indentation(const unsigned int level);
+
+static void _output(FILE * file, const unsigned int indentationLevel, const char * const format, ...);
+
+void generate(CompilerState * compilerState);
+
+int expressionType(Expression * e);
+
+int assignmentType(assignment * a);
+
+int noteType(note * n);
+
+int pitchType(pitch * p);
+
+int chordType(chord * c);
+
 
 /**
  * Converts and expression type to the proper character of the operation
@@ -115,90 +190,191 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 	_output(indentationLevel, "%s", "]\n");
 }
 */
-static void _generateType(const unsigned int identationLevel, type * type) {
-	if (type->class == NOTECLASS) {
-		_output(file, 0, "%s", " String ");
-	} else if (type->class == CHORDCLASS) {
-		_output(file, 0, "%s", " String ");
-	} else if (type->class == TABCLASS) {
-		_output(file, 0, "%s", " String ");
-	} else if (type->class == RESTCLASS) {
-		_output(file, 0, "%s", " String ");
-	} else if (type->class == INTEGERCLASS) {
-		_output(file, 0, "%s", " String ");
+static void _generateType(const unsigned int indentationLevel, type * type) {
+	if (type->class == NOTECLASS || type->class == CHORDCLASS || type->class == TABCLASS || type->class == RESTCLASS || type->class == INTEGERCLASS ) {
+		_output(file, indentationLevel, "String");
 	} else {
 		logError(_logger, "The specified expressions type is unknown: %d", type->class);
 	}
 }
 
-static void _generateId(const unsigned int identationLevel, id * id) {
-	_output(file, 0, " %s ", id->id);
+static void _generateId(const unsigned int indentationLevel, id * id) {
+	_output(file, indentationLevel, " %s ", id->id);
 }
 
-static void _generateNote(const unsigned int identationLevel, note * note) {
-	
+static void _generateNote(const unsigned int indentationLevel, note * note) {
+	_output(file, indentationLevel, " \" %s \"", note->note);
 }
 
-static void _generateNoteExpression(const unsigned int identationLevel, noteExpression * noteExpression) {
-	char noteOrId;
+static void _generateNoteExpression(const unsigned int indentationLevel, noteExpression * noteExpression) {
 	if (noteExpression->_note->type == TERMINAL) {
-		_output(file, 0,"\"[%s]%s%d\";\n", noteExpression->_instrument->instrument, noteExpression->_note->note, noteExpression->_pitch->_pitch);
+		_output(file, indentationLevel,"\"I[%s]%s%d\";\n", noteExpression->_instrument->instrument, noteExpression->_note->note, noteExpression->_pitch->_pitch);
 	} else {
-		_output(file, 0,"\"[%s]%s%d\";\n", noteExpression->_instrument->instrument, noteExpression->_note->_id, noteExpression->_pitch->_pitch);
+		_output(file, indentationLevel,"\"I[%s]%s%d\";\n", noteExpression->_instrument->instrument, noteExpression->_note->_id, noteExpression->_pitch->_pitch);
 	}
 }
 
-static void _generateScore(const unsigned int identationLevel, score * score) {
+static void _generateScore(const unsigned int indentationLevel, score * score) {
+	_output(file, 0, "String %s = \"\";\n", score->_id->id);
+	_generateScoreExpressions(indentationLevel, score->scoreExpressions, score->_id->id);
+}
+
+static void _generateScoreExpressions(const unsigned int indentationLevel, scoreExpressions * scoreExpressions, IDM id) {
+	if (scoreExpressions->type == SCOREEXPRESSIONSTYPE) {
+		_generateScoreExpression(indentationLevel, scoreExpressions->_scoreExpression, id);
+		_generateScoreExpressions(indentationLevel, scoreExpressions->_scoreExpressions, id);
+	} else {
+		_generateScoreExpression(indentationLevel, scoreExpressions->_scoreExpression, id);
+	}
+}
+
+static void _generateScoreExpression(const unsigned int indentationLevel, scoreExpression * scoreExpression, IDM id) {
+	_generateDeclaration(indentationLevel, scoreExpression->_declaration, id);
+	_generateInstruments(indentationLevel, scoreExpression->instruments, id);
+}
+
+static void _generateDeclaration(const unsigned int indentationLevel, declaration * declaration, IDM id) {
+	_generateTempo(indentationLevel, declaration->_tempo, id);
+	_generateSignature(indentationLevel, declaration->_signature, id);
+}
+
+static void _generateSignature(const unsigned int indentationLevel, signature * signature, IDM id) {
+	removeSpaces(signature->signature);
+	_output(file, indentationLevel, "%s += \" K%s \";\n",id,signature->signature);
+}
+
+static void _generateTempo(const unsigned int indentationLevel, tempo * tempo, IDM id) {
+	_output(file, indentationLevel, "%s += \" T%d \";\n",id, tempo->tempo);
+}
+
+static void _generateInstruments(const unsigned int indentationLevel, instruments * instruments, IDM id) {
+	_generateInstrument(indentationLevel, instruments->_instrument, id);
+	_generateClefDeclaration(indentationLevel, instruments->_clefDeclaration, id);
+	if (instruments->_instruments != NULL) {
+		_generateInstruments(indentationLevel, instruments->_instruments, id);
+	}
+}
+
+static void _generateInstrument(const unsigned int indentationLevel, instrument * instrument, IDM id) {
+	_output(file, indentationLevel, "%s += \" I[%s] \";\n", id, instrument->instrument);
+}
+
+static void _generateClefDeclaration(const unsigned int indentationLevel, clefDeclaration * clefDeclaration, IDM id) {
+	_generateClefSentence(indentationLevel, clefDeclaration->_clefSentence, id); 
+	_generateSentences(indentationLevel, clefDeclaration->_sentences, id);
+}
+
+static void _generateClefSentence(const unsigned int indentationLevel, clefSentence * clefSentence, IDM id) {
 
 }
 
-static void _generateChordExpression(const unsigned int identationLevel, chordExpression * chordExpression) {
+static void _generateSentences(const unsigned int indentationLevel, sentences * sentences, IDM id) {
+	if (sentences->sentencesType == SENTENCES) {
+		_generateSentence(indentationLevel, sentences->_sentence_, id);
+		_generateSentences(indentationLevel, sentences->_sentences, id);
+	} else {
+		_generateSentence(indentationLevel, sentences->_sentence, id);
+	}
+}
+
+static void _generateSentence(const unsigned int indentationLevel, sentence * sentence, IDM id) {
+	if (sentence->sentenceType == CLEFSENTENCE) {
+		_generateClefSentence(indentationLevel, sentence->_clefSentence, id);
+	} else {
+		_generateTabsSentence(indentationLevel, sentence->_tabsSentence, id);
+	}
+}
+
+static void _generateChordExpression(const unsigned int indentationLevel, chordExpression * chordExpression) {
+	_generateChordValues(indentationLevel, chordExpression->_chordValues);
+}
+
+static void _generateChordValues(const unsigned int indentationLevel, chordValues * chordValues) {
+	if (chordValues->type == CHORDVALUES) {
+		_output(file, indentationLevel, "\"%s+\" + ", chordValues->_note->note);
+		_generateChordValues(indentationLevel, chordValues->_chordValues);
+	} else if (chordValues->type == CHORDIDVALUES) { 
+		_output(file, indentationLevel, "String.format(\"\%s\",%s)", chordValues->_id->id);
+		_generateChordValues(indentationLevel, chordValues->_idChordVaues);
+	} else if (chordValues->type == CHORDNOTE) {
+		_output(file, indentationLevel, "\"%s\";\n", chordValues->note_->note);
+	} else if (chordValues->type == CHORDIDNOTE) {
+		_output(file, indentationLevel, "String.format(\"\%s\",%s);\n", chordValues->id_->id);
+	} else {
+		/* TODO: log error*/
+	}
+}
+
+static void _generatePitch(const unsigned int indentationLevel, pitch * pitch) {
+	if (pitch->type == TERMINAL) {
+		_output(file, indentationLevel, "\"%d\";\n",pitch->_pitch);
+	} else {
+		_output(file, indentationLevel, "String.format(\"\%s\",%s);\n", pitch->_id);
+	}
+}
+
+static void _generateTabExpression(const unsigned int indentationLevel, tabExpression * tabExpression, IDM id) {
+	_generateTabValues(indentationLevel, tabExpression->_tabValues, id);
+}
+
+static void _generateTabValues(const unsigned int indentationLevel, tabValues * tabValues, IDM id) {
+	if (tabValues->type == NOTETABVALUES) {
+
+	} else if (tabValues->type == CHORDTABVALUES) {
+
+	} else if (tabValues->type == RESTTABVALUES) {
+
+	} else if (tabValues->type == IDTABVALUES) {
+
+	} else if (tabValues->type == TABVALUESNOTE) {
+
+	} else if (tabValues->type == TABVALUESCHORD) {
+
+	} else if (tabValues->type == TABVALUESREST) {
+
+	} else if (tabValues->type == TABVALUESID) {
+
+	} else {
+		/* TODO: log error */
+	}
+}
+
+
+static void _generateTabsSentence(const unsigned int indentationLevel, tabsSentence * tabsSentence, IDM id) {
 
 }
 
-static void _generatePitch(const unsigned int identationLevel, pitch * pitch) {
-
-}
-
-static void _generateTabExpression(const unsigned int identationLevel, tabExpression * tabExpression) {
-
-}
-
-static void _generateTabsSentence(const unsigned int identationLevel, tabsSentence * tabsSentence) {
-
-}
-
-static void _generateExpression(const unsigned int identationLevel, Expression * expression) {
+static void _generateExpression(const unsigned int indentationLevel, Expression * expression, IDM id) {
 	if (expression->type == NOTEEXPRESSION) {
-		_generateNoteExpression(0, expression->noteExpression);
+		_generateNoteExpression(indentationLevel, expression->noteExpression);
 	} else if (expression->type == SCOREEXPRESSION) {
-		_generateScore(0, expression->_score);
+		_generateScore(indentationLevel, expression->_score);
 	} else if (expression->type == CHORDEXPRESSION) {
-		_generateChordExpression(0, expression->_chordExpression);
+		_generateChordExpression(indentationLevel, expression->_chordExpression);
 	} else if (expression->type == PITCHEXPRESSION) {
-		_generatePitch(0, expression->_pitch);
+		_generatePitch(indentationLevel, expression->_pitch);
 	} else if (expression->type == TABEXPRESSIONTYPE) {
-		_generateTabExpression(0, expression->_tabExpression);
+		_generateTabExpression(indentationLevel, expression->_tabExpression, id);
 	} else if (expression->type == TABSENTENCETYPE) {
-		_generateTabsSentence(0, expression->_tabsSentence);
+		_generateTabsSentence(indentationLevel, expression->_tabsSentence, id);
 	} else {
 		logError(_logger, "The specified expressions type is unknown: %d", expression->type);
 	}
 }
 
-static void _generateAssignment(const unsigned int identationLevel, assignment * assignment) {
-	_generateType(0, assignment->_class);
-	_generateId(0, assignment->_id);
-	_output(file, 0, "%s", " = ");
-	_generateExpression(0, assignment->expression);
+static void _generateAssignment(const unsigned int indentationLevel, assignment * assignment) {
+	_generateType(indentationLevel, assignment->_class);
+	_generateId(indentationLevel, assignment->_id);
+	_output(file, indentationLevel, " = ");
+	_generateExpression(indentationLevel, assignment->expression, assignment->_id->id);
 }
 
 
-static void _generateProgramExpression(const unsigned int identationLevel, programExpression * programExpression) {
+static void _generateProgramExpression(const unsigned int indentationLevel, programExpression * programExpression) {
 	if (programExpression->type == ASSIGNMENT) {
-		_generateAssignment(0, programExpression->assignment);
+		_generateAssignment(indentationLevel, programExpression->assignment);
 	} else if (programExpression->type == EXPRESSION) {
-		_generateExpression(0, programExpression->expression);
+		_generateExpression(indentationLevel, programExpression->expression, "");
 	} else {
 		logError(_logger, "The specified expressions type is unknown: %d", programExpression->type);
 	}
@@ -320,8 +496,9 @@ int chordType(chord * c) {
 			return -1;
 		}
 	}
-	return CHORDCLASS
+	return CHORDCLASS;
 }
+
 
 
 // int noteType(note * n) {

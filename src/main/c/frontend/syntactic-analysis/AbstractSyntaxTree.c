@@ -191,7 +191,7 @@ void releaseChordValues(chordValues * _chordValues){
 				break;
 			case CHORDIDVALUES:
 				releaseId(_chordValues->_id);
-				releaseChordValues(_chordValues->_idchordValues);
+				releaseChordValues(_chordValues->_idChordVaues);
 				break;
 			case CHORDNOTE:
 				releaseNote(_chordValues->note_);

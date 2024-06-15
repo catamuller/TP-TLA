@@ -196,7 +196,7 @@ id: ID											{ $$ = IDSemanticAction($1); }
 type: NOTECLASS 								{ $$ = TypeSemanticAction($1); }
 	| CHORDCLASS 								{ $$ = TypeSemanticAction($1); }
 	| TABCLASS 									{ $$ = TypeSemanticAction($1); }
-	| RESTCLASS 								{ $$ = TypeSemanticAction($1); }
+//	| RESTCLASS 								{ $$ = TypeSemanticAction($1); }
 	| INTEGERCLASS								{ $$ = TypeSemanticAction($1); }
 	;
 
