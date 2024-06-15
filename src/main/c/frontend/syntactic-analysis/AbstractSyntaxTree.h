@@ -77,7 +77,9 @@ enum ProgramType {
 };
 enum ChordValuesType{
 	CHORDVALUES,
-	CHORDNOTE
+	CHORDIDVALUES,
+	CHORDNOTE,
+	CHORDIDNOTE
 };
 
 enum tabsSentenceType {
@@ -235,6 +237,7 @@ struct tab {
 		note * _note;
 		chord * _chord;
 		rest * _rest;
+		id * _id;
 	};
 	tab * _tab;
 	TabType tabType;
@@ -354,6 +357,11 @@ struct chordValues {
 			chordValues * _chordValues;
 		};
 		note * note_;
+		struct {
+			id * _id;
+			chordValues * _idChordVaues;
+		};
+		id * id_;
 	};
 	ChordValuesType type;
 };

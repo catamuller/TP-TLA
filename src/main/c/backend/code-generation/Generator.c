@@ -303,15 +303,26 @@ int noteType(note * n) {
 	return NOTECLASS;
 }
 
-int pitchType(pitch * n) {
-	if (n->type == NONTERMINAL) {
-		if(getType(n->_id->id) != INTEGER) {
+int pitchType(pitch * p) {
+	if (p->type == NONTERMINAL) {
+		if(getType(p->_id->id) != INTEGER) {
 			logError(_logger, "Incorrect variable type. Expected: Integer");
 			return -1;
 		}
 	}
 	return INTEGER;
 }
+
+int chordType(chord * c) {
+	if (c->type == NONTERMINAL) {
+		if(getType(c->_id->id) != CHORDCLASS) {
+			logError(_logger, "Incorrect variable type. Expected: Chord");
+			return -1;
+		}
+	}
+	return CHORDCLASS
+}
+
 
 // int noteType(note * n) {
 // 	if (n->type == NONTERMINAL) {

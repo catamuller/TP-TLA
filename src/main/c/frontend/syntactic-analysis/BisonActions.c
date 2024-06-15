@@ -136,14 +136,16 @@ chordValues * chordValuesChordValuesSemanticAction(note * _note, chordValues * _
 	chordValues * toReturn = calloc(1, sizeof(chordValues));
 	toReturn->_chordValues = _chordValues;
 	toReturn->_note = _note;
+	toReturn->type = CHORDVALUES;
 	return toReturn;
 }
 
 chordValues * chordValuesIdChordValuesSemanticAction(id * id, chordValues * _chordValues) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	chordValues * toReturn = calloc(1, sizeof(chordValues));
-	toReturn->_chordValues = _chordValues;
-	toReturn->_note = id;
+	toReturn->_idChordValues = _chordValues;
+	toReturn->_id = id;
+	toReturn->type = CHORDIDVALUES;
 	return toReturn;
 }
 
@@ -151,6 +153,15 @@ chordValues * chordValuesNoteSemanticAction(note * note_) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	chordValues * toReturn = calloc(1, sizeof(chordValues));
 	toReturn->note_ = note_;
+	toReturn->type = CHORDNOTE;
+	return toReturn;
+}
+
+chordValues * chordValuesIdNoteSemanticAction(id * id_) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	chordValues * toReturn = calloc(1, sizeof(chordValues));
+	toReturn->id_ = id_;
+	toReturn->type = CHORDIDNOTE;
 	return toReturn;
 }
 
@@ -572,7 +583,16 @@ tab * tabRestTabSemanticAction(rest * _rest, tab * _tab) {
 	tab * toReturn = calloc(1, sizeof(tab));
 	toReturn->_rest = _rest;
 	toReturn->_tab = _tab;			
-	toReturn->tabType = NOTETYPE;
+	toReturn->tabType = RESTTYPE;
+	return toReturn;
+}
+
+tab * tabIdTabSemanticAction(id * _id, tab * _tab) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	tab * toReturn = calloc(1, sizeof(tab));
+	toReturn->_id = _id;
+	toReturn->_tab = _tab;			
+	toReturn->tabType = IDTYPE;
 	return toReturn;
 }
 

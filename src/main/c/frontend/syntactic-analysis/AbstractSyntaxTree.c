@@ -187,9 +187,17 @@ void releaseChordValues(chordValues * _chordValues){
 		switch(_chordValues->type){
 			case CHORDVALUES:
 				releaseNote(_chordValues->_note);
+				releaseChordValues(_chordValues->_chordValues);
+				break;
+			case CHORDIDVALUES:
+				releaseId(_chordValues->_id);
+				releaseChordValues(_chordValues->_idchordValues);
 				break;
 			case CHORDNOTE:
-				releaseChordValues(_chordValues->_chordValues);
+				releaseNote(_chordValues->note_);
+				break;
+			case CHORDIDNOTE:
+				releaseId(_chordValues->id_);
 				break;
 		}
 		free(_chordValues);
@@ -438,6 +446,11 @@ void releaseTab(tab * tab){
 			break;
 		case RESTTYPE:
 			releaseRest(tab->_rest);
+			if (tab->_tab != NULL)
+				releaseTab(tab->_tab);
+			break;
+		case IDTYPE:
+			releaseId(tab->_id);
 			if (tab->_tab != NULL)
 				releaseTab(tab->_tab);
 			break;

@@ -69,6 +69,8 @@ chordExpression * chordExpressionSemanticAction(chordValues * _chordValues);
 
 chordValues * chordValuesChordValuesSemanticAction(note * _note, chordValues * _chordValues);
 
+chordValues * chordValuesIdChordValuesSemanticAction(id * id, chordValues * _chordValues);
+
 expressions * ExpressionsProgramExpressionExpressionsSemanticAction(programExpression * _programExpression, expressions * _expressions);
 
 expressions * ExpressionsProgramExpressionSemanticAction(programExpression * _programExpression);
@@ -121,6 +123,8 @@ scoreExpression * ScoreExpressionSemanticAction(declaration * _declaration, inst
 Expression * expressionNoteExpressionSemanticAction(noteExpression * _noteExpression);
 
 chordValues * chordValuesNoteSemanticAction(note * note_);
+
+chordValues * chordValuesIdNoteSemanticAction(id * id_);
 
 Expression * expressionPitchSemanticAction(pitch * _pitch);
 
@@ -183,6 +187,8 @@ tab * tabNoteTabSemanticAction(note * _note, tab * _tab);
 tab * tabChordTabSemanticAction(chord * _chord, tab * _tab);
 
 tab * tabRestTabSemanticAction(rest * _rest, tab * _tab);
+
+tab * tabIdTabSemanticAction(id * _id, tab * _tab);
 
 sentence * sentenceClefSentenceSemanticAction(clefSentence * _clefSentence);
 
