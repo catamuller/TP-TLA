@@ -458,20 +458,34 @@ void generate(CompilerState * compilerState) {
 
 
 /* TYPE FUNCTIONS */
+int correspondingExpression(int class){
+	switch (class){
+	case INTEGERCLASS: return PITCHEXPRESSION;
+	case NOTECLASS: return NOTEEXPRESSION;
+	case CHORDCLASS: return CHORDEXPRESSION;
+	case TABCLASS: return TABEXPRESSIONTYPE;
+	default: return -1;
+	}
+}
+
 int expressionType(Expression * e) {
 	return e->type;
 }
 
 int assignmentType(assignment * a) {
 	int t = a->_class->class;
-	if (t == expressionType(a->expression)) return t;
+	if (correspondingExpression(t) == expressionType(a->expression)) return t;
 	logError(_logger, "The expression does not match the declaration type.");
 	return -1;
 }
 
+int idType(id * _id){
+	return getType(_id->id);
+}
+
 int noteType(note * n) {
 	if (n->type == NONTERMINAL) {
-		if(getType(n->_id->id) != NOTECLASS) {
+		if(idType(n->_id) != NOTECLASS) {
 			logError(_logger, "Incorrect variable type. Expected: Note");
 			return -1;
 		}
@@ -481,7 +495,7 @@ int noteType(note * n) {
 
 int pitchType(pitch * p) {
 	if (p->type == NONTERMINAL) {
-		if(getType(p->_id->id) != INTEGER) {
+		if(idType(p->_id) != INTEGER) {
 			logError(_logger, "Incorrect variable type. Expected: Integer");
 			return -1;
 		}
@@ -491,12 +505,38 @@ int pitchType(pitch * p) {
 
 int chordType(chord * c) {
 	if (c->type == NONTERMINAL) {
-		if(getType(c->_id->id) != CHORDCLASS) {
+		if(idType(c->_id) != CHORDCLASS) {
 			logError(_logger, "Incorrect variable type. Expected: Chord");
 			return -1;
 		}
 	}
 	return CHORDCLASS;
+}
+
+int chordValuesType(chordValues * _chordValues) {
+	if(_chordValues->type == CHORDIDVALUES){
+		if(idType(_chordValues->_id) != NOTECLASS) {
+			logError(_logger, "Incompatible variable type for chord. Expected: Note");
+			return -1;
+		}
+	}
+	if(_chordValues->type == CHORDIDNOTE){
+		if(idType(_chordValues->id_) != NOTECLASS) {
+			logError(_logger, "Incompatible variable type for chord. Expected: Note");
+			return -1;
+		}
+	}
+	return _chordValues->type;
+}
+
+int tabType(tab * _tab) {
+	if(_tab->tabType == IDTYPE) {
+		if(_tab->_id != CHORDCLASS || _tab->_id != NOTECLASS) {
+			logError(_logger, "Incompatible variable type for tab. Expected: Note or Chord");
+			return -1;
+		}
+	}
+	return _tab->tabType;
 }
 
 
