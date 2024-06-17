@@ -59,6 +59,11 @@ int pitchType(pitch* p);
 int chordType(chord* c);
 int chordValuesType(chordValues* _chordValues);
 int tabType(tab* _tab);
+int tabValuesTypeCheck(tabValues * _tabValues);
+int tabsSentenceTypeCheck(tabsSentence * _tabsSentence);
+int afterType(after * _after);
+int beforeType(before * _before);
+
 
 /* MODULE INTERNAL STATE */
 
@@ -435,7 +440,9 @@ static void _generateExpression(const unsigned int indentationLevel, Expression 
 static void _generateAssignment(const unsigned int indentationLevel, assignment * assignment) {
 	_generateType(indentationLevel, assignment->_class);
 	_generateId(indentationLevel, assignment->_id);
-	addToTable(assignment->_id, assignment->_class->class, NULL); //TODO init???????????????
+	printf("####saracatunga allegations##### : %d\n", assignment->_class->class);
+	printf("####saracatunga claims: %s\n", assignment->_id->id);
+	addToTable(assignment->_id->id, assignment->_class->class, NULL); //TODO init???????????????
 	assignmentType(assignment);
 	_output(file, indentationLevel, " = \"\";\n");
 	_generateExpression(indentationLevel, assignment->expression, assignment->_id->id);
@@ -621,6 +628,7 @@ int chordValuesType(chordValues * _chordValues) {
 
 int tabType(tab * _tab) {
 	if(_tab->tabType == IDTYPE) {
+		printf("#####saracatunga allegations 2.0 : %d\n", idType(_tab->_id));
 		if(idType(_tab->_id) != CHORDCLASS || idType(_tab->_id) != NOTECLASS) {
 			logError(_logger, "Incompatible variable type for tab. Expected: Note or Chord");
 			return -1;
@@ -632,6 +640,8 @@ int tabType(tab * _tab) {
 int tabValuesTypeCheck(tabValues * _tabValues) {
 	if(_tabValues->type == IDTABVALUES || _tabValues->type == TABVALUESID) {
 		//los ids que se usan para generr un tab solo pueden ser notas o acordes
+		printf("#########saracatunga allegations 3.0: %d\n", idType(_tabValues->_id));
+		printf("#########saracatunga claims 3.0: %s\n", _tabValues->_id->id);
 		if(idType(_tabValues->_id) != CHORDCLASS || idType(_tabValues->_id) != NOTECLASS) {
 			logError(_logger, "Incompatible variable type for tab. Expected: Note or Chord");
 			return -1;

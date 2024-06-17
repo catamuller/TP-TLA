@@ -104,6 +104,7 @@ void logError(const Logger * logger, const char * const format, ...) {
 	va_start(arguments, format);
 	_log(logger, ERROR, format, arguments);
 	va_end(arguments);
+	exit(1);
 }
 
 void logInformation(const Logger * logger, const char * const format, ...) {

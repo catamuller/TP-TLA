@@ -17,7 +17,7 @@ bool _isInitialized() {
 bool checkExistance(char * id) {
   _CHECK_INITIALIZATION_;
   MapValue value = mapGet(symbolTable, id);
-  return value.type != NULL;
+  return value.type != 0;
 }
 
 int getType(char * id) {

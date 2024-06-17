@@ -37,11 +37,11 @@ bool _mapRemove(Map * map, char * key, int index, int startingIndex) {
 }
 
 MapValue _mapGet(Map * map, char * key, int index, int startingIndex) {
-  if (index == startingIndex) return (MapValue) {NULL, NULL};
+  if (index == startingIndex) return (MapValue) {0, NULL};
   if (index == map->capacity)
     return _mapGet(map, key, 0, startingIndex);
   if (strcmp(map->map[index].key, key) != 0)
-    return _mapGet(key, map, index+1, startingIndex);
+    return _mapGet(map, key, index+1, startingIndex);
   return map->map[index].value;
 }
 
@@ -85,7 +85,7 @@ bool mapRemove(Map * map, char * key) {
 }
 
 MapValue mapGet(Map * map, char * key) {
-  if (key == NULL || *key == '\0' || map->size == 0) return (MapValue) {NULL, NULL};
+  if (key == NULL || *key == '\0' || map->size == 0) return (MapValue) {0, NULL};
   int hash = _calcHash(key, map->capacity);
   if (strcmp(map->map[hash].key, key) != 0)
     return _mapGet(map, key, hash+1, hash);
