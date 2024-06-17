@@ -463,7 +463,10 @@ control * controlSemanticAction(repeat * _repeat, control * _control) {
 	control * toReturn = calloc(1, sizeof(control));
 	toReturn->_control = _control;
 	toReturn->_repeat = _repeat;
-	toReturn->type = REPEATT;
+	if (_repeat!=NULL && _control!=NULL)
+		toReturn->type = REPEATT;
+	else
+		toReturn->type = -1;
 	return toReturn;
 }
 

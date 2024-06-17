@@ -21,7 +21,7 @@ bool checkExistance(char * id) {
 }
 
 int getType(char * id) {
-  if (checkExistance(id)) return ERROR_MAP;
+  if (!checkExistance(id)) return ERROR_MAP;
   MapValue mv = mapGet(symbolTable, id);
   return mv.type;
 }
@@ -35,5 +35,13 @@ bool _addToTable(char * id, int type, char * init) {
 bool addToTable(char * id, int type, char * init) {
   if (checkExistance(id)) return ERROR_MAP;
   return _addToTable(id, type, init);
+}
+
+void freeTable() {
+  mapFree(symbolTable);
+}
+
+void printTable() {
+  _mapPrint(symbolTable);
 }
 

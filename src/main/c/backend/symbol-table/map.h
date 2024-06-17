@@ -1,5 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
+#define ERROR_MAP -2
 
 typedef struct MapValue{
   int type;
@@ -17,11 +18,13 @@ typedef struct Map{
   long size;
 } Map;
 
-typedef enum {TRUE, FALSE, ERROR_MAP} bool;
+typedef enum {TRUE, FALSE} bool;
 
 Map * mapInit(long capacity);
 bool mapPut(Map * map, char * key, MapValue value);
 bool mapRemove(Map * map, char * key);
 MapValue mapGet(Map * map, char * key);
+void mapFree(Map * map);
+void _mapPrint(Map * map);
 
 #endif

@@ -8,40 +8,41 @@
 int _calcHash(char * key, long mod) {
   long h = 0;
     for (int i = 0; key[i]; i++) {
-        h = 31 * h + key[i];
+      h = 31 * h + key[i];
     }
     return h % mod;
 }
 
 bool _mapPut(Map * map, char * key, MapValue value, int index, int startingIndex) {
   if (index == startingIndex) return FALSE;
-  if (index == map->capacity)
-    return _mapPut(map, key, value, 0, startingIndex);
   if (map->map[index].key != NULL) 
-    return _mapPut(map, key, value, index+1, startingIndex);
+    return _mapPut(map, key, value, index+1%map->capacity, startingIndex);
   map->map[index].key = key;
   map->map[index].value = value;
   map->size++;
   return TRUE;
 }
 
+void _mapPrint(Map * map) {
+  printf("Map:\n");
+  for(int i=0;i<map->capacity;i++) {
+    printf("{Key: %s; Value: {%d,%s}}\n", map->map[i].key, map->map[i].value.type, map->map[i].value.initialization);
+  }
+}
+
 bool _mapRemove(Map * map, char * key, int index, int startingIndex) {
-  if (index == startingIndex) return FALSE;
-  if (index == map->capacity)
-    return _mapRemove(map, key, 0, startingIndex);
+  if (index == startingIndex || map->map[index].key == NULL) return FALSE;
   if (strcmp(map->map[index].key, key) != 0)
-    return _mapRemove(map, key, index+1, startingIndex);
+    return _mapRemove(map, key, index+1%map->capacity, startingIndex);
   map->map[index].key = NULL;
   map->size--;
   return TRUE;
 }
 
 MapValue _mapGet(Map * map, char * key, int index, int startingIndex) {
-  if (index == startingIndex) return (MapValue) {0, NULL};
-  if (index == map->capacity)
-    return _mapGet(map, key, 0, startingIndex);
+  if (index == startingIndex || map->map[index].key == NULL) return (MapValue) {0, NULL};
   if (strcmp(map->map[index].key, key) != 0)
-    return _mapGet(map, key, index+1, startingIndex);
+    return _mapGet(map, key, index+1%map->capacity, startingIndex);
   return map->map[index].value;
 }
 
@@ -66,7 +67,7 @@ bool mapPut(Map * map, char * key, MapValue value) {
   if (key == NULL || *key == '\0' || map->size == map->capacity) return FALSE;
   int hash = _calcHash(key, map->capacity);
   if (map->map[hash].key != NULL) {
-    return _mapPut(map, key, value, hash+1, hash);
+    return _mapPut(map, key, value, hash+1%map->capacity, hash);
   }
   map->map[hash].key = key;
   map->map[hash].value = value;
@@ -78,7 +79,7 @@ bool mapRemove(Map * map, char * key) {
   if (key == NULL || *key == '\0' || map->size == 0) return FALSE;
   int hash = _calcHash(key, map->capacity);
   if (strcmp(map->map[hash].key, key) != 0)
-    return _mapRemove(map, key, hash+1, hash);
+    return _mapRemove(map, key, hash+1%map->capacity, hash);
   map->map[hash].key = NULL;
   map->size--;
   return TRUE;
@@ -87,8 +88,9 @@ bool mapRemove(Map * map, char * key) {
 MapValue mapGet(Map * map, char * key) {
   if (key == NULL || *key == '\0' || map->size == 0) return (MapValue) {0, NULL};
   int hash = _calcHash(key, map->capacity);
+  if (map->map[hash].key == NULL) return (MapValue) {0, NULL};
   if (strcmp(map->map[hash].key, key) != 0)
-    return _mapGet(map, key, hash+1, hash);
+    return _mapGet(map, key, hash+1%map->capacity, hash);
   return map->map[hash].value;
 }
 

@@ -87,9 +87,10 @@ void initializeDirectories() {
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
 	initializeDirectories();
+	initTable();
 	file = fopen("marimbash/src/main/java/org/marimbash/MarimbaMusic.java", "w");
 	pom = fopen("marimbash/pom.xml", "w");
-	_output(pom, 0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"><modelVersion>4.0.0</modelVersion><groupId>org.example</groupId><artifactId>MarimbaSh</artifactId><version>1.0-SNAPSHOT</version><repositories><repository><id>jitpack.io</id><url>https://jitpack.io</url></repository></repositories><dependencies><dependency><groupId>com.github.JensPiegsa</groupId><artifactId>jfugue</artifactId><version>5.0.9</version></dependency></dependencies><properties><maven.compiler.source>18</maven.compiler.source><maven.compiler.target>18</maven.compiler.target><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding></properties></project>");
+	_output(pom, 0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\"><modelVersion>4.0.0</modelVersion><groupId>org.marimbash</groupId><artifactId>MarimbaMusic</artifactId><version>1.0-SNAPSHOT</version><repositories><repository><id>jitpack.io</id><url>https://jitpack.io</url></repository></repositories><dependencies><dependency><groupId>com.github.JensPiegsa</groupId><artifactId>jfugue</artifactId><version>5.0.9</version></dependency></dependencies><properties><maven.compiler.source>18</maven.compiler.source><maven.compiler.target>18</maven.compiler.target><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding></properties></project>");
 }
 
 void shutdownGeneratorModule() {
@@ -97,6 +98,7 @@ void shutdownGeneratorModule() {
 		destroyLogger(_logger);
 		fclose(file);
 		fclose(pom);
+		freeTable();
 	}
 }
 
@@ -191,12 +193,11 @@ static void _generateScoreExpressions(const unsigned int indentationLevel, score
 	if (scoreExpressions->type == SCOREEXPRESSIONSTYPE) {
 		_output(file, indentationLevel, "%s += \" V%d \";\n", id, voices_amount);
 		_generateScoreExpression(indentationLevel, scoreExpressions->_scoreExpression, id);
-		voices_amount++; //un score es una sola voz
-		//tantas voces como scores
+		voices_amount++; 
 		_generateScoreExpressions(indentationLevel, scoreExpressions->_scoreExpressions, id);
 	} else {
 		_output(file, indentationLevel, "%s += \" V%d \";\n", id, voices_amount);
-		voices_amount++; //un score es una sola voz
+		voices_amount++; 
 		_generateScoreExpression(indentationLevel, scoreExpressions->_scoreExpression, id);
 	}
 }
@@ -352,7 +353,7 @@ static void _generateTabsSentence(const unsigned int indentationLevel, tabsSente
 }
 
 static void _generateControlSentence(const unsigned int indentationLevel, controlSentence * controlSentence, IDM id) {
-	if (controlSentence->_control != NULL) {
+	if (controlSentence!=NULL && controlSentence->_control != NULL) {
 		_generateControl(indentationLevel, controlSentence->_control, id);
 	} else {
 		/** algo para hacer? */
@@ -360,7 +361,10 @@ static void _generateControlSentence(const unsigned int indentationLevel, contro
 }
 
 static void _generateControl(const unsigned int indentationLevel, control * control, IDM id) {
+	if (control == NULL) return;
 	if (control->type == REPEATT) {
+		printf("repeat!!!11!\n");
+																		// 		:p :happy:		PARA QUE NO SE PISEN CON OTRAS VARIABLES / IDs
 		_output(file, indentationLevel, "for (int bIkbl6iUiyoaLbBplOnLw8PWppO6PvlruJmXysx4RU=0;bIkbl6iUiyoaLbBplOnLw8PWppO6PvlruJmXysx4RU<%d;bIkbl6iUiyoaLbBplOnLw8PWppO6PvlruJmXysx4RU++) {\n", control->_repeat->_repeat);
 		_output(file, indentationLevel, "%s += %s;\n", id, id);
 		_output(file, indentationLevel, "}\n");
@@ -440,8 +444,6 @@ static void _generateExpression(const unsigned int indentationLevel, Expression 
 static void _generateAssignment(const unsigned int indentationLevel, assignment * assignment) {
 	_generateType(indentationLevel, assignment->_class);
 	_generateId(indentationLevel, assignment->_id);
-	printf("####saracatunga allegations##### : %d\n", assignment->_class->class);
-	printf("####saracatunga claims: %s\n", assignment->_id->id);
 	addToTable(assignment->_id->id, assignment->_class->class, NULL); //TODO init???????????????
 	assignmentType(assignment);
 	_output(file, indentationLevel, " = \"\";\n");
@@ -480,7 +482,6 @@ static void _generateProgram(Program * program) {
 static void _generatePrologue(void) {
 	_output(file, 0, "%s",
 		"package org.marimbash;\n"
-		"import org.jfugue.*;\n"
 		"import org.jfugue.player.Player;\n"
 		"import org.jfugue.pattern.Pattern;\n"
 		"import org.jfugue.midi.MidiFileManager;\n"
@@ -501,11 +502,19 @@ static void _generateClass(void) {
 }
 
 static void _generateEpilogue() {
+	_output(file, 0, "Pattern pattern = new Pattern(");
+	for(int i=0;i<score_amount;i++) {
+		_output(file, 0, "pattern%d", i);
+		if (i != score_amount-1)
+			_output(file, 0, ",");
+	}
+	_output(file, 0, ");\n");
 	_output(file, 0, "%s",
 		"			try {\n"
-		"					File filePath = new File(\"marimbash/output.mid\");\n"
+		"					File filePath = new File(\"output.mid\");\n"
+		"					filePath.createNewFile();\n"
 		"   			MidiFileManager.savePatternToMidi(pattern, filePath);\n"
-		"					ProcessBuilder processBuilder = new ProcessBuilder(\"musescore\",\"-o\", \"marimbash/output.pdf\",\"marimbash/output.mid\");\n"
+		"					ProcessBuilder processBuilder = new ProcessBuilder(\"musescore\",\"-o\", \"output.pdf\",\"output.mid\");\n"
 		"					Process process = processBuilder.start();\n"
 		"					int exitCode = process.waitFor();\n"
 		"			} catch (IOException | InterruptedException ex) {\n"
@@ -628,8 +637,7 @@ int chordValuesType(chordValues * _chordValues) {
 
 int tabType(tab * _tab) {
 	if(_tab->tabType == IDTYPE) {
-		printf("#####saracatunga allegations 2.0 : %d\n", idType(_tab->_id));
-		if(idType(_tab->_id) != CHORDCLASS || idType(_tab->_id) != NOTECLASS) {
+		if(idType(_tab->_id) != CHORDCLASS && idType(_tab->_id) != NOTECLASS && idType(_tab->_id) != TABCLASS) {
 			logError(_logger, "Incompatible variable type for tab. Expected: Note or Chord");
 			return -1;
 		}
@@ -640,9 +648,7 @@ int tabType(tab * _tab) {
 int tabValuesTypeCheck(tabValues * _tabValues) {
 	if(_tabValues->type == IDTABVALUES || _tabValues->type == TABVALUESID) {
 		//los ids que se usan para generr un tab solo pueden ser notas o acordes
-		printf("#########saracatunga allegations 3.0: %d\n", idType(_tabValues->_id));
-		printf("#########saracatunga claims 3.0: %s\n", _tabValues->_id->id);
-		if(idType(_tabValues->_id) != CHORDCLASS || idType(_tabValues->_id) != NOTECLASS) {
+		if(idType(_tabValues->_id) != CHORDCLASS && idType(_tabValues->_id) != NOTECLASS) {
 			logError(_logger, "Incompatible variable type for tab. Expected: Note or Chord");
 			return -1;
 		}
@@ -661,14 +667,14 @@ int tabsSentenceTypeCheck(tabsSentence * _tabsSentence) {
 }
 
 int afterType(after * _after) {
-	if(idType(_after->_id) != TABSSENTENCECLASS || idType(_after->_id) != TABCLASS) {
+	if(idType(_after->_id) != TABSSENTENCECLASS && idType(_after->_id) != TABCLASS) {
 		logError(_logger, "Incorrect variable type. Expected: Tab or tabs");
 		return -1;
 	} 
 }
 
 int beforeType(before * _before) {
-	if(idType(_before->_id) != TABSSENTENCECLASS || idType(_before->_id) != TABCLASS) {
+	if(idType(_before->_id) != TABSSENTENCECLASS && idType(_before->_id) != TABCLASS) {
 		logError(_logger, "Incorrect variable type. Expected: Tab or tabs");
 		return -1;
 	} 
