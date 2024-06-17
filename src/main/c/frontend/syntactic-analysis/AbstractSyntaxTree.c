@@ -222,6 +222,9 @@ void releaseProgramExpression(programExpression * _programExpression) {
 void releaseNoteExpression(noteExpression * noteExpression){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
 	if (noteExpression != NULL) {
+		releaseNote(noteExpression->_note);
+		releasePitch(noteExpression->_pitch);
+		releaseInstrument(noteExpression->_instrument);
 		free(noteExpression);
 	}
 }
@@ -296,10 +299,10 @@ void releaseSentences(sentences * sentences){
 		switch (sentences->sentencesType)
 		{
 		case SENTENCE:
-			free(sentences->_sentence);
+			releaseSentence(sentences->_sentence);
 		
 		case SENTENCES:
-			free(sentences->_sentences);
+			releaseSentences(sentences->_sentences);
 		}
 	}
 }
@@ -310,10 +313,10 @@ void releaseSentence(sentence * sentence){
 		switch (sentence->sentenceType)
 		{
 		case CLEFSENTENCE:
-			free(sentence->_clefSentence);
+			releaseClefSentence(sentence->_clefSentence);
 		
 		case TABSSENTENCE:
-			free(sentence->_tabsSentence);
+			releaseTabsSentence(sentence->_tabsSentence);
 		}
 		
 		free(sentence);
