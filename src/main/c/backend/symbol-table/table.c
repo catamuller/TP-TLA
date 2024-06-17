@@ -26,13 +26,13 @@ int getType(char * id) {
   return mv.type;
 }
 
-bool _addToTable(char * id, char * type, char * init) {
+bool _addToTable(char * id, int type, char * init) {
   _CHECK_INITIALIZATION_;
   MapValue value = (MapValue) {type, init};
   return mapPut(symbolTable, id, value);
 }
 
-bool addToTable(char * id, char * type, char * init) {
+bool addToTable(char * id, int type, char * init) {
   if (checkExistance(id)) return ERROR_MAP;
   return _addToTable(id, type, init);
 }

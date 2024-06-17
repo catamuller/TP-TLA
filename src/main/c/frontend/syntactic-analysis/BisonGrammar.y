@@ -291,7 +291,7 @@ clef: CLEFVALUE											{ $$ = clefSemanticAction($1); }
 
 tabsSentence: TABS id OPEN_BRACES tabs CLOSE_BRACES	controlSentence	{ $$ = tabsSentenceSemanticAction($2, $4, $6); }
 	| TABS OPEN_BRACES tabs CLOSE_BRACES controlSentence			{ $$ = tabsSentenceSemanticAction(NULL, $3, $5); }
-	| id 															//TODO													{ $$ = tabsSentenceSemanticAction($1, NULL, NULL); }	
+	| id 															{ $$ = tabsSentenceSemanticAction($1, NULL, NULL); }	
 	;
 
 controlSentence: control			{ $$ = controlSentenceSemanticAction($1); }

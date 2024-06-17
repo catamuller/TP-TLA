@@ -1,6 +1,2 @@
-/*
- * Note myNote = Note(h,7,piano);
- *
- * Este programa es aceptado debido a que la letra 'h' es tomada como un ID, y cualquier constructor 
- * de Note acepta una note o un ID.
- */
+Note myNote = Note(h,7,piano);
+
