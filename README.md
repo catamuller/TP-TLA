@@ -23,3 +23,6 @@
         #<path_to_file> es el path al archivo .msh que queremos parsear.
 
         #El resultado son dos archivos, un midi y un .pdf
+
+    #OBSERVACIONES:
+        #Es necesario contar con la version 18 de Java, así como tener Maven instalado
