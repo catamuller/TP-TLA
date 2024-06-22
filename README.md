@@ -71,5 +71,5 @@ After integration is done, change the badges of this `README.md` to point to the
         #El resultado son dos archivos, un midi y un .pdf
 
     #OBSERVACIONES:
-        #Es necesario contar con la version 18 de Java, así como tener Maven instalado
+        #Es necesario contar con la version 18 de Java, así como tener Maven y musescore instalados
 
